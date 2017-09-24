@@ -3,9 +3,9 @@
 
 <p align="center">
   </br></br>
-  <a href="">
+  <a href="https://goo.gl/SxDNxc">
     <img src="https://i.imgur.com/q6E8SOD.png" alt="Chrome Web Store"></a>
-  <a href="">
+  <a href="https://goo.gl/fHgufz">
     <img src="https://i.imgur.com/IuvTttN.png" alt="Firefox add-ons"></a>
   <a href="">
     <img src="https://i.imgur.com/wK10qEV.png" alt="Opera add-ons"></a>
