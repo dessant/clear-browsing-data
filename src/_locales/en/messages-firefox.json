@@ -1,0 +1,21 @@
+{
+  "menuItemTitle_formData": {
+    "message": "Form Data",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_pluginData": {
+    "message": "Plugin Data",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_allDataTypes": {
+    "message": "All Data Types",
+    "description": "Title of the menu item."
+  },
+
+  "optionSectionTitle_dataTypes": {
+    "message": "Data Types",
+    "description": "Title of the option section."
+  }
+}

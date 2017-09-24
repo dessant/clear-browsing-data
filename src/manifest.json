@@ -1,0 +1,60 @@
+{
+  "manifest_version": 2,
+  "name": "__MSG_extensionName__",
+  "description": "__MSG_extensionDescription__",
+  "version": "0.1.0",
+  "author": "Armin Sebastian",
+  "homepage_url": "https://github.com/dessant/clear-browsing-data",
+  "default_locale": "en",
+
+  "applications": {
+    "gecko": {
+      "id": "{ce9f4b1f-24b8-4e9a-9051-b9e472b1b2f2}",
+      "strict_min_version": "53.0"
+    }
+  },
+  "minimum_chrome_version": "55.0",
+  "minimum_opera_version": "42.0",
+
+  "permissions": ["browsingData", "notifications", "storage"],
+
+  "content_security_policy":
+    "default-src 'self'; img-src 'self' data:; connect-src 'none'; media-src 'none'; object-src 'none'; child-src 'none'; form-action 'none'; sandbox allow-same-origin allow-scripts;",
+
+  "icons": {
+    "16": "src/icons/app/app-icon-16.png",
+    "19": "src/icons/app/app-icon-19.png",
+    "24": "src/icons/app/app-icon-24.png",
+    "32": "src/icons/app/app-icon-32.png",
+    "38": "src/icons/app/app-icon-38.png",
+    "48": "src/icons/app/app-icon-48.png",
+    "64": "src/icons/app/app-icon-64.png",
+    "96": "src/icons/app/app-icon-96.png",
+    "128": "src/icons/app/app-icon-128.png"
+  },
+
+  "browser_action": {
+    "default_icon": {
+      "16": "src/icons/app/app-icon-16.png",
+      "19": "src/icons/app/app-icon-19.png",
+      "24": "src/icons/app/app-icon-24.png",
+      "32": "src/icons/app/app-icon-32.png",
+      "38": "src/icons/app/app-icon-38.png",
+      "48": "src/icons/app/app-icon-48.png",
+      "64": "src/icons/app/app-icon-64.png",
+      "96": "src/icons/app/app-icon-96.png",
+      "128": "src/icons/app/app-icon-128.png"
+    },
+    "browser_style": false
+  },
+
+  "options_ui": {
+    "page": "src/options/index.html",
+    "browser_style": false,
+    "chrome_style": false
+  },
+
+  "background": {
+    "page": "src/background/index.html"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {"chrome": 55, "firefox": 53, "opera": 42},
+        "exclude": ["transform-regenerator"]
+      }
+    ]
+  ],
+  "env": {
+    "production": {
+      "plugins": ["lodash"]
+    }
+  }
+}
