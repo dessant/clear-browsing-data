@@ -135,14 +135,11 @@ body {
 .title {
   padding-right: 48px;
   white-space: nowrap;
-  font-size: 1.13rem !important;
   @include mdc-typography('title');
   @include mdc-theme-prop('color', 'text-primary-on-light');
 }
 
 .settings-icon {
-  width: 20px;
-  height: 20px;
   cursor: pointer;
 }
 
