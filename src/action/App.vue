@@ -4,7 +4,7 @@
     <div class="title">
       {{ getText('extensionName') }}
     </div>
-    <img class="settings-icon" src="/src/icons/settings.png"
+    <img class="settings-icon" src="/src/icons/misc/settings.svg"
         @click="showSettings = !showSettings"/>
   </div>
 
@@ -20,7 +20,7 @@
         v-if="clearAllDataTypes"
         @click="selectItem('allDataTypes')">
       <img class="mdc-list-item__start-detail"
-          src="/src/icons/dataTypes/allDataTypes.png">
+          src="/src/icons/dataTypes/allDataTypes.svg">
       {{ getText('menuItemTitle_allDataTypes') }}
     </li>
     <li role="separator" class="mdc-list-divider"
@@ -33,7 +33,7 @@
             :key="dataType.id"
             @click="selectItem(dataType)">
           <img class="mdc-list-item__start-detail"
-              :src="`/src/icons/dataTypes/${dataType}.png`">
+              :src="`/src/icons/dataTypes/${dataType}.svg`">
           {{ getText(`menuItemTitle_${dataType}`) }}
         </li>
       </div>

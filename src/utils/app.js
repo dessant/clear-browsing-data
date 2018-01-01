@@ -30,7 +30,7 @@ function showNotification(messageId) {
     type: 'basic',
     title: getText('extensionName'),
     message: getText(messageId),
-    iconUrl: '/src/icons/app/app-icon-48.png'
+    iconUrl: '/src/icons/app/icon-48.png'
   });
 }
 

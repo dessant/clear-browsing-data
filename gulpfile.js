@@ -8,6 +8,7 @@ const recursiveReadDir = require('recursive-readdir');
 const gulp = require('gulp');
 const gulpSeq = require('gulp-sequence');
 const htmlmin = require('gulp-htmlmin');
+const svgmin = require('gulp-svgmin');
 const postcss = require('gulp-postcss');
 const gulpif = require('gulp-if');
 const jsonMerge = require('gulp-merge-json');
@@ -50,14 +51,11 @@ gulp.task('html', function() {
 
 gulp.task('icons', async function() {
   ensureDirSync('dist/src/icons/app');
-  ensureDirSync('dist/src/icons/dataTypes');
-  const svgPaths = await recursiveReadDir('src/icons', ['*.!(svg)']);
-  for (svgPath of svgPaths) {
-    const pngBuffer = await svg2png(readFileSync(svgPath));
-    writeFileSync(
-      path.join('dist', svgPath.replace(/^(.*)\.svg$/i, '$1.png')),
-      pngBuffer
-    );
+  const iconSvg = readFileSync('src/icons/app/icon.svg');
+  const iconSizes = [16, 19, 24, 32, 38, 48, 64, 96, 128];
+  for (const size of iconSizes) {
+    const pngBuffer = await svg2png(iconSvg, {width: size, height: size});
+    writeFileSync(`dist/src/icons/app/icon-${size}.png`, pngBuffer);
   }
 
   if (isProduction) {
@@ -66,6 +64,11 @@ gulp.task('icons', async function() {
       .pipe(imagemin())
       .pipe(gulp.dest(''));
   }
+
+  gulp
+    .src('src/icons/**/*.svg', {base: '.'})
+    .pipe(gulpif(isProduction, svgmin()))
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('fonts', function() {
