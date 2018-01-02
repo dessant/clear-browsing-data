@@ -4,57 +4,64 @@
     <div class="title">
       {{ getText('extensionName') }}
     </div>
-    <img class="settings-icon" src="/src/icons/misc/settings.svg"
-        @click="showSettings = !showSettings"/>
+    <div class="header-buttons">
+      <img class="settings-icon" src="/src/icons/misc/settings.svg"
+          @click="showSettings = !showSettings"/>
+    </div>
   </div>
 
-  <transition name="settings">
+  <transition name="settings"
+      @after-enter="handleSizeChange"
+      @after-leave="handleSizeChange">
     <div class="settings" v-if="showSettings">
       <v-select v-model="clearSince" :options="selectOptions.clearSinceAction">
       </v-select>
     </div>
   </transition>
 
-  <ul class="mdc-list">
-    <li class="mdc-list-item ripple-surface"
-        v-if="clearAllDataTypes"
+  <div class="list-padding-top"></div>
+  <ul class="mdc-list list list-bulk-button" v-if="clearAllDataTypes">
+    <li class="mdc-list-item list-item ripple-surface"
         @click="selectItem('allDataTypes')">
-      <img class="mdc-list-item__start-detail"
+      <img class="mdc-list-item__start-detail list-item-icon"
           src="/src/icons/dataTypes/allDataTypes.svg">
       {{ getText('menuItemTitle_allDataTypes') }}
     </li>
-    <li role="separator" class="mdc-list-divider"
-        v-if="clearAllDataTypes || dataTypes.length > 8">
-    </li>
-    <div class="items-wrap">
-      <div class="items">
-        <li class="mdc-list-item ripple-surface"
-            v-for="dataType in dataTypes"
-            :key="dataType.id"
-            @click="selectItem(dataType)">
-          <img class="mdc-list-item__start-detail"
-              :src="`/src/icons/dataTypes/${dataType}.svg`">
-          {{ getText(`menuItemTitle_${dataType}`) }}
-        </li>
-      </div>
-    </div>
   </ul>
+  <ul class="mdc-list list list-separator"
+      v-if="clearAllDataTypes || hasScrollBar">
+    <li role="separator" class="mdc-list-divider"></li>
+  </ul>
+  <div class="list-items-wrap" ref="items" :class="listClasses">
+    <resize-observer @notify="handleSizeChange"></resize-observer>
+    <ul class="mdc-list list list-items">
+      <li class="mdc-list-item list-item ripple-surface"
+          v-for="dataType in dataTypes"
+          :key="dataType.id"
+          @click="selectItem(dataType)">
+        <img class="mdc-list-item__start-detail list-item-icon"
+            :src="`/src/icons/dataTypes/${dataType}.svg`">
+        {{ getText(`menuItemTitle_${dataType}`) }}
+      </li>
+    </ul>
+  </div>
 </div>
 </template>
 
 <script>
 import browser from 'webextension-polyfill';
+import {ResizeObserver} from 'vue-resize';
+import {Select} from 'ext-components';
 
 import storage from 'storage/storage';
-import {getEnabledDataTypes, getSelectOptionLabels} from 'utils/app';
+import {getEnabledDataTypes, getOptionLabels} from 'utils/app';
 import {getText} from 'utils/common';
 import {optionKeys} from 'utils/data';
 
-import Select from 'components/Select';
-
 export default {
   components: {
-    [Select.name]: Select
+    [Select.name]: Select,
+    [ResizeObserver.name]: ResizeObserver
   },
 
   data: function() {
@@ -62,7 +69,7 @@ export default {
       dataLoaded: false,
 
       showSettings: false,
-      selectOptions: getSelectOptionLabels({
+      selectOptions: getOptionLabels({
         clearSinceAction: [
           '1hour',
           '3hours',
@@ -72,11 +79,21 @@ export default {
           'epoch'
         ]
       }),
+      hasScrollBar: false,
+      isPopup: false,
 
       dataTypes: [],
       clearAllDataTypes: false,
       clearSince: ''
     };
+  },
+
+  computed: {
+    listClasses: function() {
+      return {
+        'list-items-max-height': this.isPopup
+      };
+    }
   },
 
   methods: {
@@ -87,11 +104,32 @@ export default {
         id: 'actionPopupSubmit',
         item
       });
-      window.close();
+
+      this.closeAction();
+    },
+
+    closeAction: async function() {
+      if (!this.isPopup) {
+        browser.tabs.remove((await browser.tabs.getCurrent()).id);
+      } else {
+        window.close();
+      }
+    },
+
+    handleSizeChange: function() {
+      const items = this.$refs.items;
+      this.hasScrollBar = items.scrollHeight > items.clientHeight;
     }
   },
 
   created: async function() {
+    const currentTab = await browser.tabs.getCurrent();
+    this.isPopup = !currentTab || currentTab instanceof Array;
+    if (!this.isPopup) {
+      document.documentElement.style.height = '100%';
+      document.body.style.minWidth = 'initial';
+    }
+
     const options = await storage.get(optionKeys, 'sync');
     const enDataTypes = await getEnabledDataTypes(options);
 
@@ -116,10 +154,21 @@ $mdc-theme-primary: #1abc9c;
 @import '@material/typography/mixins';
 @import "@material/ripple/mixins";
 
+@import 'vue-resize/dist/vue-resize';
+
+body,
+#app {
+  height: 100%;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
 body {
   margin: 0;
-  min-width: 300px;
-  min-height: 362px;
+  min-width: 413px;
   overflow: hidden;
 }
 
@@ -127,16 +176,26 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  white-space: nowrap;
   padding-top: 16px;
   padding-left: 16px;
   padding-right: 16px;
 }
 
 .title {
-  padding-right: 48px;
-  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   @include mdc-typography('title');
   @include mdc-theme-prop('color', 'text-primary-on-light');
+}
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  margin-left: 32px;
+  @media (min-width: 413px) {
+    margin-left: 56px;
+  }
 }
 
 .settings-icon {
@@ -164,36 +223,51 @@ body {
   opacity: 0;
 }
 
-.items-wrap {
-  max-height: 392px;
-  overflow-y: auto;
+.list {
+  padding: 0 !important;
 }
 
-.items {
+.list-padding-top {
   margin-bottom: 8px;
 }
 
-.mdc-list {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+.list-bulk-button {
+  height: 48px;
 }
 
-.mdc-list-item {
+.list-separator {
+  height: 1px;
+}
+
+.list-items-wrap {
+  overflow-y: auto;
+}
+
+.list-items-max-height {
+  max-height: 392px;
+}
+
+.list-items {
+  padding-bottom: 8px !important;
+}
+
+.list-item {
   padding-left: 16px;
   padding-right: 48px;
-  white-space: nowrap;
   cursor: pointer;
 }
 
-.mdc-list-item__start-detail {
+.list-item-icon {
   margin-right: 16px !important;
 }
 
 .ripple-surface {
-  @include mdc-ripple-base;
-  @include mdc-ripple-bg((pseudo: "::before"));
-  @include mdc-ripple-fg((pseudo: "::after"));
+  @include mdc-ripple-surface;
+  @include mdc-states;
+  @include mdc-ripple-radius;
 
+  position: sticky;
+  outline: none;
   overflow: hidden;
 }
 </style>

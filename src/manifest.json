@@ -19,7 +19,7 @@
   "permissions": ["browsingData", "notifications", "storage"],
 
   "content_security_policy":
-    "default-src 'self'; img-src 'self' data:; connect-src 'none'; media-src 'none'; object-src 'none'; child-src 'none'; form-action 'none'; sandbox allow-same-origin allow-scripts;",
+    "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'none'; media-src 'none'; object-src 'none'; child-src 'none'; form-action 'none'; sandbox allow-same-origin allow-scripts;",
 
   "icons": {
     "16": "src/icons/app/icon-16.png",

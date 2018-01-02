@@ -51,16 +51,12 @@
 import browser from 'webextension-polyfill';
 import _ from 'lodash';
 import draggable from 'vuedraggable';
+import {Checkbox, Switch, Select, FormField} from 'ext-components';
 
 import storage from 'storage/storage';
-import {getSelectOptionLabels} from 'utils/app';
+import {getOptionLabels} from 'utils/app';
 import {getText} from 'utils/common';
 import {optionKeys} from 'utils/data';
-
-import Checkbox from 'components/Checkbox';
-import Switch from 'components/Switch';
-import Select from 'components/Select';
-import FormField from 'components/FormField';
 
 export default {
   components: {
@@ -75,7 +71,7 @@ export default {
     return {
       dataLoaded: false,
 
-      selectOptions: getSelectOptionLabels({
+      selectOptions: getOptionLabels({
         clearAllDataTypesAction: ['main', 'sub', 'false'],
         clearSince: ['1hour', '3hours', '1day', '1week', '4weeks', 'epoch']
       }),
@@ -135,6 +131,11 @@ $mdc-theme-primary: #1abc9c;
 @import '@material/theme/mixins';
 @import '@material/typography/mixins';
 
+.mdc-select__menu {
+  top: inherit !important;
+  left: inherit !important;
+}
+
 .mdc-checkbox {
   margin-left: 8px;
 }
@@ -171,6 +172,7 @@ body {
   display: grid;
   grid-row-gap: 12px;
   padding-top: 16px;
+  grid-auto-columns: min-content;
 }
 
 .option {

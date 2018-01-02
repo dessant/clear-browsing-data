@@ -11,14 +11,14 @@ async function getEnabledDataTypes(options) {
   return _.difference(options.dataTypes, options.disabledDataTypes);
 }
 
-function getSelectOptionLabels(optionData) {
+function getOptionLabels(data, scope = 'optionValue') {
   const labels = {};
-  for (const [group, values] of Object.entries(optionData)) {
+  for (const [group, items] of Object.entries(data)) {
     labels[group] = [];
-    values.forEach(function(value) {
+    items.forEach(function(value) {
       labels[group].push({
         id: value,
-        label: getText(`optionValue_${group}_${value}`)
+        label: getText(`${scope}_${group}_${value}`)
       });
     });
   }
@@ -36,6 +36,6 @@ function showNotification(messageId) {
 
 module.exports = {
   getEnabledDataTypes,
-  getSelectOptionLabels,
+  getOptionLabels,
   showNotification
 };

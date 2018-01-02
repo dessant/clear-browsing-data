@@ -30,7 +30,7 @@ let plugins = [
     minChunks: function(module, count) {
       return (
         module.resource &&
-        /\/(@material|(css|vue)-loader|src\/(action|options|components))\//.test(
+        /\/(@material|ext-components|(css|vue)-loader|src\/(options|action))\//.test(
           module.resource
         ) &&
         count >= 2
