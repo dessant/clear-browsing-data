@@ -345,6 +345,11 @@
     "description": "Title of the page."
   },
 
+  "pageTitle_contribute": {
+    "message": "Contribute",
+    "description": "Title of the page."
+  },
+
   "info_dataTypeCleared": {
     "message": "The selected browsing data has been successfully cleared.",
     "description": "Info message."

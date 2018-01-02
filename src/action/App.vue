@@ -5,6 +5,9 @@
       {{ getText('extensionName') }}
     </div>
     <div class="header-buttons">
+      <img class="contribute-icon"
+          src="/src/contribute/assets/heart.svg"
+          @click="showContribute">
       <img class="settings-icon" src="/src/icons/misc/settings.svg"
           @click="showSettings = !showSettings"/>
     </div>
@@ -54,7 +57,11 @@ import {ResizeObserver} from 'vue-resize';
 import {Select} from 'ext-components';
 
 import storage from 'storage/storage';
-import {getEnabledDataTypes, getOptionLabels} from 'utils/app';
+import {
+  getEnabledDataTypes,
+  getOptionLabels,
+  showContributePage
+} from 'utils/app';
 import {getText} from 'utils/common';
 import {optionKeys} from 'utils/data';
 
@@ -97,7 +104,7 @@ export default {
   },
 
   methods: {
-    getText: getText,
+    getText,
 
     selectItem: function(item) {
       browser.runtime.sendMessage({
@@ -105,6 +112,11 @@ export default {
         item
       });
 
+      this.closeAction();
+    },
+
+    showContribute: async function() {
+      await showContributePage();
       this.closeAction();
     },
 
@@ -168,7 +180,7 @@ body,
 
 body {
   margin: 0;
-  min-width: 413px;
+  min-width: 342px;
   overflow: hidden;
 }
 
@@ -192,10 +204,15 @@ body {
 .header-buttons {
   display: flex;
   align-items: center;
-  margin-left: 32px;
-  @media (min-width: 413px) {
-    margin-left: 56px;
+  margin-left: 56px;
+  @media (max-width: 341px) {
+    margin-left: 32px;
   }
+}
+
+.contribute-icon {
+  margin-right: 16px;
+  cursor: pointer;
 }
 
 .settings-icon {

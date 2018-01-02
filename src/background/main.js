@@ -2,10 +2,21 @@ import browser from 'webextension-polyfill';
 
 import storage from 'storage/storage';
 import {getText} from 'utils/common';
-import {getEnabledDataTypes, showNotification} from 'utils/app';
+import {
+  getEnabledDataTypes,
+  showNotification,
+  showContributePage
+} from 'utils/app';
 import {optionKeys} from 'utils/data';
 
 async function clearDataType(dataType, options, enDataTypes = null) {
+  let {useCount} = await storage.get('useCount', 'sync');
+  useCount += 1;
+  await storage.set({useCount}, 'sync');
+  if ([10, 50].includes(useCount)) {
+    await showContributePage('clear');
+  }
+
   let since;
   if (options.clearSince === 'epoch') {
     since = 0;

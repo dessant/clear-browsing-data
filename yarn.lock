@@ -3625,6 +3625,17 @@ ext-components@dessant/ext-components#^0.1.1:
     typeface-roboto "^0.0.45"
     vue "^2.5.9"
 
+ext-contribute@dessant/ext-contribute#^0.1.0:
+  version "0.1.0"
+  resolved "https://codeload.github.com/dessant/ext-contribute/tar.gz/73de70176b7ba7aadcd48c6966b6e319649c0c5c"
+  dependencies:
+    "@material/theme" "^0.25.0"
+    "@material/typography" "^0.3.0"
+    ext-components dessant/ext-components#^0.1.1
+    typeface-roboto "^0.0.45"
+    vue "^2.5.9"
+    webextension-polyfill "^0.2.1"
+
 extend-shallow@^1.1.2:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/extend-shallow/-/extend-shallow-1.1.4.tgz#19d6bf94dfc09d76ba711f39b872d21ff4dd9071"

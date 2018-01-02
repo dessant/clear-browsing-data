@@ -63,6 +63,10 @@ gulp.task('icons', async function() {
     .src('src/icons/**/*.svg', {base: '.'})
     .pipe(gulpif(isProduction, svgmin()))
     .pipe(gulp.dest('dist'));
+  gulp
+    .src('node_modules/ext-contribute/src/assets/*.svg')
+    .pipe(gulpif(isProduction, svgmin()))
+    .pipe(gulp.dest('dist/src/contribute/assets'));
 });
 
 gulp.task('fonts', function() {
@@ -71,7 +75,7 @@ gulp.task('fonts', function() {
     .pipe(postcss())
     .pipe(gulp.dest('dist'));
   gulp
-    .src('node_modules/typeface-roboto/files/roboto-latin-@(400|500).woff2')
+    .src('node_modules/typeface-roboto/files/roboto-latin-@(400|500|700).woff2')
     .pipe(gulp.dest('dist/src/fonts/files'));
 });
 
@@ -143,6 +147,9 @@ gulp.task('manifest', function() {
 });
 
 gulp.task('copy', function() {
+  gulp
+    .src('node_modules/ext-contribute/src/assets/*.@(jpg|png)')
+    .pipe(gulp.dest('dist/src/contribute/assets'));
   gulp.src(['LICENSE']).pipe(gulp.dest('dist'));
 });
 
