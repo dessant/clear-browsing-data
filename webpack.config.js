@@ -8,7 +8,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const targetEnv = process.env.TARGET_ENV || 'firefox';
 const isProduction = process.env.NODE_ENV === 'production';
 
-const uiModules = ['options', 'action', 'contribute'];
 let plugins = [
   new webpack.DefinePlugin({
     'process.env': {
@@ -27,21 +26,7 @@ let plugins = [
   new webpack.optimize.CommonsChunkPlugin({
     name: 'commons-ui',
     filename: '[name]/commons.bundle.js',
-    chunks: uiModules,
-    minChunks: function(module, count) {
-      return (
-        module.resource &&
-        /\/(@material|ext-(components|contribute)|(css|vue)-loader|src\/(options|action|contribute))\//.test(
-          module.resource
-        ) &&
-        count >= 2
-      );
-    }
-  }),
-  new webpack.optimize.CommonsChunkPlugin({
-    name: 'commons',
-    filename: '[name].bundle.js',
-    chunks: ['background', ...uiModules],
+    chunks: ['options', 'action', 'contribute'],
     minChunks: 2
   }),
   isProduction ? new webpack.optimize.ModuleConcatenationPlugin() : null,
