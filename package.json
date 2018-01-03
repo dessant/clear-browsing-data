@@ -70,7 +70,7 @@
     "npm-check-updates": "^2.14.0",
     "recursive-readdir": "^2.2.1",
     "sass-loader": "^6.0.6",
-    "standard-version": "^4.2.0",
+    "standard-version": "^4.3.0",
     "svg2png": "^4.1.1",
     "typeface-roboto": "^0.0.45",
     "vue-loader": "^13.6.2",
