@@ -4,6 +4,11 @@
     "description": "Title of the menu item."
   },
 
+  "menuItemTitle_localStorage": {
+    "message": "Local Storage",
+    "description": "Title of the menu item."
+  },
+
   "menuItemTitle_pluginData": {
     "message": "Plugin Data",
     "description": "Title of the menu item."
