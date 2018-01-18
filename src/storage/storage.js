@@ -2,7 +2,6 @@ import browser from 'webextension-polyfill';
 
 import migrate from 'storage-versions';
 
-// Firefox <= 52
 let syncArea;
 async function getSupportedArea(requestedArea) {
   if (typeof syncArea === 'undefined') {

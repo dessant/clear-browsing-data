@@ -3,8 +3,7 @@
     [
       "env",
       {
-        "targets": {"chrome": 55, "firefox": 53, "opera": 42},
-        "exclude": ["transform-regenerator"]
+        "targets": {"chrome": 55, "firefox": 57, "opera": 42}
       }
     ]
   ],
