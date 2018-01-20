@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/dessant/clear-browsing-data/compare/v1.1.0...v2.0.0) (2018-01-20)
+
+
+### Features
+
+* drop support for older Firefox versions ([21a929e](https://github.com/dessant/clear-browsing-data/commit/21a929e))
+* enable Local Storage and IndexedDB clearing for Firefox ([a6306be](https://github.com/dessant/clear-browsing-data/commit/a6306be))
+
+
+### BREAKING CHANGES
+
+* Firefox < 57 is not supported anymore.
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/dessant/clear-browsing-data/compare/v1.0.0...v1.1.0) (2018-01-03)
 
