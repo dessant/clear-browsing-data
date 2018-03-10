@@ -8,6 +8,7 @@ import {
   showContributePage
 } from 'utils/app';
 import {optionKeys} from 'utils/data';
+import {targetEnv} from 'utils/config';
 
 async function clearDataType(dataType, options, enDataTypes = null) {
   let {useCount} = await storage.get('useCount', 'sync');
@@ -61,7 +62,13 @@ async function clearDataType(dataType, options, enDataTypes = null) {
   }
 
   try {
-    await browser.browsingData.remove({since}, dataTypes);
+    if (dataTypes.localStorage && since && targetEnv === 'firefox') {
+      await browser.browsingData.removeLocalStorage({});
+      delete dataTypes.localStorage;
+    }
+    if (Object.keys(dataTypes).length) {
+      await browser.browsingData.remove({since}, dataTypes);
+    }
   } catch (e) {
     console.log(e);
     await showNotification('error_dataTypeNotCleared');
