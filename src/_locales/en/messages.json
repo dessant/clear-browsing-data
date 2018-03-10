@@ -285,6 +285,16 @@
     "description": "Value of the option."
   },
 
+  "optionValue_clearSince_90days": {
+    "message": "Clear data from the past 90 days",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_365days": {
+    "message": "Clear data from the past 365 days",
+    "description": "Value of the option."
+  },
+
   "optionValue_clearSince_epoch": {
     "message": "Clear data from the beginning of time",
     "description": "Value of the option."
@@ -312,6 +322,16 @@
 
   "optionValue_clearSinceAction_4weeks": {
     "message": "The past 4 weeks",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSinceAction_90days": {
+    "message": "The past 90 days",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSinceAction_365days": {
+    "message": "The past 365 days",
     "description": "Value of the option."
   },
 

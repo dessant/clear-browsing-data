@@ -83,6 +83,8 @@ export default {
           '1day',
           '1week',
           '4weeks',
+          '90days',
+          '365days',
           'epoch'
         ]
       }),

@@ -73,7 +73,16 @@ export default {
 
       selectOptions: getOptionLabels({
         clearAllDataTypesAction: ['main', 'sub', 'false'],
-        clearSince: ['1hour', '3hours', '1day', '1week', '4weeks', 'epoch']
+        clearSince: [
+          '1hour',
+          '3hours',
+          '1day',
+          '1week',
+          '4weeks',
+          '90days',
+          '365days',
+          'epoch'
+        ]
       }),
 
       options: {
@@ -148,6 +157,7 @@ body {
   min-width: 600px;
   @include mdc-typography-base;
   font-size: 100%;
+  overflow: visible !important;
 }
 
 #app {

@@ -38,6 +38,12 @@ async function clearDataType(dataType, options, enDataTypes = null) {
       case '4weeks':
         timeDelta = 1000 * 60 * 60 * 24 * 7 * 4;
         break;
+      case '90days':
+        timeDelta = 1000 * 60 * 60 * 24 * 90;
+        break;
+      case '365days':
+        timeDelta = 1000 * 60 * 60 * 24 * 365;
+        break;
     }
     since = new Date().getTime() - timeDelta;
   }
