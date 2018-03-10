@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/dessant/clear-browsing-data/compare/v2.0.0...v2.1.0) (2018-03-10)
+
+
+### Bug Fixes
+
+* do not pass `since` when removing localStorage in Firefox ([4e5e500](https://github.com/dessant/clear-browsing-data/commit/4e5e500))
+* update dependencies ([853e367](https://github.com/dessant/clear-browsing-data/commit/853e367))
+
+
+### Features
+
+* clear browsing data from the past 90 and 365 days ([3018c89](https://github.com/dessant/clear-browsing-data/commit/3018c89)), closes [#5](https://github.com/dessant/clear-browsing-data/issues/5)
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/dessant/clear-browsing-data/compare/v1.1.0...v2.0.0) (2018-01-20)
 
