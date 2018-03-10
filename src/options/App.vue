@@ -25,17 +25,17 @@
       {{ getText('optionSectionTitle_misc') }}
     </div>
     <div class="option-wrap">
-      <div class="option">
+      <div class="option select">
         <v-select v-model="options.clearAllDataTypesAction"
             :options="selectOptions.clearAllDataTypesAction">
         </v-select>
       </div>
-      <div class="option">
+      <div class="option select">
         <v-select v-model="options.clearSince"
             :options="selectOptions.clearSince">
         </v-select>
       </div>
-      <div class="option">
+      <div class="option select">
         <v-form-field input-id="nos"
             :label="getText('optionTitle_notifyOnSuccess')">
           <v-switch id="nos" v-model="options.notifyOnSuccess"></v-switch>
@@ -146,6 +146,8 @@ $mdc-theme-primary: #1abc9c;
 
 body {
   min-width: 600px;
+  @include mdc-typography-base;
+  font-size: 100%;
 }
 
 #app {
@@ -179,5 +181,9 @@ body {
   display: flex;
   align-items: center;
   height: 36px;
+}
+
+.option.select {
+  align-items: end;
 }
 </style>

@@ -26,7 +26,7 @@
   <ul class="mdc-list list list-bulk-button" v-if="clearAllDataTypes">
     <li class="mdc-list-item list-item ripple-surface"
         @click="selectItem('allDataTypes')">
-      <img class="mdc-list-item__start-detail list-item-icon"
+      <img class="mdc-list-item__graphic list-item-icon"
           src="/src/icons/dataTypes/allDataTypes.svg">
       {{ getText('menuItemTitle_allDataTypes') }}
     </li>
@@ -42,7 +42,7 @@
           v-for="dataType in dataTypes"
           :key="dataType.id"
           @click="selectItem(dataType)">
-        <img class="mdc-list-item__start-detail list-item-icon"
+        <img class="mdc-list-item__graphic list-item-icon"
             :src="`/src/icons/dataTypes/${dataType}.svg`">
         {{ getText(`menuItemTitle_${dataType}`) }}
       </li>
@@ -182,6 +182,8 @@ body {
   margin: 0;
   min-width: 342px;
   overflow: hidden;
+  @include mdc-typography-base;
+  font-size: 100%;
 }
 
 .header {
@@ -280,8 +282,8 @@ body {
 
 .ripple-surface {
   @include mdc-ripple-surface;
+  @include mdc-ripple-radius-bounded;
   @include mdc-states;
-  @include mdc-ripple-radius;
 
   position: sticky;
   outline: none;
