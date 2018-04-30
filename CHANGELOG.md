@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.1.1"></a>
+## [2.1.1](https://github.com/dessant/clear-browsing-data/compare/v2.1.0...v2.1.1) (2018-04-30)
+
+
+### Bug Fixes
+
+* add labels for select components and fix their position ([3deba4e](https://github.com/dessant/clear-browsing-data/commit/3deba4e))
+* copy assets as the last build step ([2981d71](https://github.com/dessant/clear-browsing-data/commit/2981d71))
+
+
+
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/dessant/clear-browsing-data/compare/v2.0.0...v2.1.0) (2018-03-10)
 
