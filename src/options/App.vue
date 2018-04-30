@@ -26,16 +26,18 @@
     </div>
     <div class="option-wrap">
       <div class="option select">
-        <v-select v-model="options.clearAllDataTypesAction"
+        <v-select :label="getText('optionTitle_clearAllDataTypes')"
+            v-model="options.clearAllDataTypesAction"
             :options="selectOptions.clearAllDataTypesAction">
         </v-select>
       </div>
       <div class="option select">
-        <v-select v-model="options.clearSince"
+        <v-select :label="getText('optionTitle_clearSince')"
+            v-model="options.clearSince"
             :options="selectOptions.clearSince">
         </v-select>
       </div>
-      <div class="option select">
+      <div class="option">
         <v-form-field input-id="nos"
             :label="getText('optionTitle_notifyOnSuccess')">
           <v-switch id="nos" v-model="options.notifyOnSuccess"></v-switch>
@@ -194,6 +196,6 @@ body {
 }
 
 .option.select {
-  align-items: end;
+  height: 56px;
 }
 </style>

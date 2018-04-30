@@ -17,7 +17,9 @@
       @after-enter="handleSizeChange"
       @after-leave="handleSizeChange">
     <div class="settings" v-if="showSettings">
-      <v-select v-model="clearSince" :options="selectOptions.clearSinceAction">
+      <v-select :label="getText('optionTitle_clearSince')"
+          v-model="clearSince"
+          :options="selectOptions.clearSince">
       </v-select>
     </div>
   </transition>
@@ -77,7 +79,7 @@ export default {
 
       showSettings: false,
       selectOptions: getOptionLabels({
-        clearSinceAction: [
+        clearSince: [
           '1hour',
           '3hours',
           '1day',
@@ -169,6 +171,11 @@ $mdc-theme-primary: #1abc9c;
 @import '@material/ripple/mixins';
 
 @import 'vue-resize/dist/vue-resize';
+
+.mdc-select__menu {
+  top: -48px !important;
+  left: inherit !important;
+}
 
 body,
 #app {

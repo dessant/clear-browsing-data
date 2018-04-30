@@ -245,98 +245,68 @@
     "description": "Title of the option section."
   },
 
+  "optionTitle_clearAllDataTypes": {
+    "message": "Clear all data types",
+    "description": "Title of the option."
+  },
+
   "optionValue_clearAllDataTypesAction_main": {
-    "message": "Clear all data types from browser toolbar",
+    "message": "From browser toolbar",
     "description": "Value of the option."
   },
 
   "optionValue_clearAllDataTypesAction_sub": {
-    "message": "Clear all data types from browser toolbar popup",
+    "message": "From browser toolbar popup",
     "description": "Value of the option."
   },
 
   "optionValue_clearAllDataTypesAction_false": {
-    "message": "Do not clear all data types from browser toolbar",
+    "message": "Disable",
     "description": "Value of the option."
   },
 
+  "optionTitle_clearSince": {
+    "message": "Time range",
+    "description": "Title of the option."
+  },
+
   "optionValue_clearSince_1hour": {
-    "message": "Clear data from the past hour",
+    "message": "Last hour",
     "description": "Value of the option."
   },
 
   "optionValue_clearSince_3hours": {
-    "message": "Clear data from the past 3 hours",
+    "message": "Last 3 hours",
     "description": "Value of the option."
   },
 
   "optionValue_clearSince_1day": {
-    "message": "Clear data from the past day",
+    "message": "Last day",
     "description": "Value of the option."
   },
 
   "optionValue_clearSince_1week": {
-    "message": "Clear data from the past week",
+    "message": "Last week",
     "description": "Value of the option."
   },
 
   "optionValue_clearSince_4weeks": {
-    "message": "Clear data from the past 4 weeks",
+    "message": "Last 4 weeks",
     "description": "Value of the option."
   },
 
   "optionValue_clearSince_90days": {
-    "message": "Clear data from the past 90 days",
+    "message": "Last 90 days",
     "description": "Value of the option."
   },
 
   "optionValue_clearSince_365days": {
-    "message": "Clear data from the past 365 days",
+    "message": "Last 365 days",
     "description": "Value of the option."
   },
 
   "optionValue_clearSince_epoch": {
-    "message": "Clear data from the beginning of time",
-    "description": "Value of the option."
-  },
-
-  "optionValue_clearSinceAction_1hour": {
-    "message": "The past hour",
-    "description": "Value of the option."
-  },
-
-  "optionValue_clearSinceAction_3hours": {
-    "message": "The past 3 hours",
-    "description": "Value of the option."
-  },
-
-  "optionValue_clearSinceAction_1day": {
-    "message": "The past day",
-    "description": "Value of the option."
-  },
-
-  "optionValue_clearSinceAction_1week": {
-    "message": "The past week",
-    "description": "Value of the option."
-  },
-
-  "optionValue_clearSinceAction_4weeks": {
-    "message": "The past 4 weeks",
-    "description": "Value of the option."
-  },
-
-  "optionValue_clearSinceAction_90days": {
-    "message": "The past 90 days",
-    "description": "Value of the option."
-  },
-
-  "optionValue_clearSinceAction_365days": {
-    "message": "The past 365 days",
-    "description": "Value of the option."
-  },
-
-  "optionValue_clearSinceAction_epoch": {
-    "message": "The beginning of time",
+    "message": "All time",
     "description": "Value of the option."
   },
 
