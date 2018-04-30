@@ -154,15 +154,11 @@ gulp.task('copy', function() {
 
 gulp.task(
   'build',
-  gulpSeq('clean', [
-    'js',
-    'html',
-    'icons',
-    'fonts',
-    'locale',
-    'manifest',
+  gulpSeq(
+    'clean',
+    ['js', 'html', 'icons', 'fonts', 'locale', 'manifest'],
     'copy'
-  ])
+  )
 );
 
 gulp.task('default', ['build']);
