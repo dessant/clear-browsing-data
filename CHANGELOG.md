@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.1.2"></a>
+## [2.1.2](https://github.com/dessant/clear-browsing-data/compare/v2.1.1...v2.1.2) (2018-05-01)
+
+
+### Bug Fixes
+
+* set default background color ([4723ed8](https://github.com/dessant/clear-browsing-data/commit/4723ed8)), closes [#6](https://github.com/dessant/clear-browsing-data/issues/6)
+
+
+
 <a name="2.1.1"></a>
 ## [2.1.1](https://github.com/dessant/clear-browsing-data/compare/v2.1.0...v2.1.1) (2018-04-30)
 
