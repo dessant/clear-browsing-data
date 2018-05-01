@@ -159,6 +159,7 @@ body {
   min-width: 600px;
   @include mdc-typography-base;
   font-size: 100%;
+  background-color: #ffffff;
   overflow: visible !important;
 }
 
