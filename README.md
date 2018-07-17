@@ -3,11 +3,11 @@
 
 <p align="center">
   </br></br>
-  <a href="https://goo.gl/SxDNxc">
+  <a href="https://chrome.google.com/webstore/detail/clear-browsing-data/bjilljlpencdcpihofiobpnfgcakfdbe">
     <img src="https://i.imgur.com/q6E8SOD.png" alt="Chrome Web Store"></a>
-  <a href="https://goo.gl/fHgufz">
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/clear-browsing-data/">
     <img src="https://i.imgur.com/dvof8rG.png" alt="Firefox add-ons"></a>
-  <a href="">
+  <a href="https://addons.opera.com/en/extensions/details/clear-browsing-data/">
     <img src="https://i.imgur.com/wK10qEV.png" alt="Opera add-ons"></a>
   </br></br>
 </p>
