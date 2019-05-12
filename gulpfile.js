@@ -145,18 +145,37 @@ gulp.task('manifest', function() {
     .pipe(gulp.dest('dist'));
 });
 
+gulp.task('license', function(done) {
+  let year = '2017';
+  const currentYear = new Date().getFullYear().toString();
+  if (year !== currentYear) {
+    year = `${year}-${currentYear}`;
+  }
+
+  const notice = dedent`
+    Clear Browsing Data
+    Copyright (c) ${year} Armin Sebastian
+
+    This software is released under the terms of the GNU General Public License v3.0.
+    See the LICENSE file for further information.
+  `;
+
+  writeFileSync('dist/NOTICE', notice);
+  gulp.src(['LICENSE']).pipe(gulp.dest('dist'));
+  done();
+});
+
 gulp.task('copy', function() {
   gulp
     .src('node_modules/ext-contribute/src/assets/*.@(jpg|png)')
     .pipe(gulp.dest('dist/src/contribute/assets'));
-  gulp.src(['LICENSE']).pipe(gulp.dest('dist'));
 });
 
 gulp.task(
   'build',
   gulpSeq(
     'clean',
-    ['js', 'html', 'icons', 'fonts', 'locale', 'manifest'],
+    ['js', 'html', 'icons', 'fonts', 'locale', 'manifest', 'license'],
     'copy'
   )
 );
