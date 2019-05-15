@@ -5,8 +5,7 @@
   },
 
   "extensionDescription": {
-    "message":
-      "Delete browsing data directly from the browser toolbar. Clear cookies, history and cache with a single click.",
+    "message": "Delete browsing data directly from the browser toolbar. Clear cookies, history and cache with a single click.",
     "description": "Description of the extension."
   },
 
@@ -346,14 +345,12 @@
   },
 
   "error_allDataTypesDisabled": {
-    "message":
-      "All data types have been disabled. Visit the options page and enable at least one data type.",
+    "message": "All data types have been disabled. Visit the options page and enable at least one data type.",
     "description": "Error message."
   },
 
   "error_dataTypeNotCleared": {
-    "message":
-      "Something went wrong. The selected browsing data has not been cleared.",
+    "message": "Something went wrong. The selected browsing data has not been cleared.",
     "description": "Error message."
   },
 

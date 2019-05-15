@@ -6,6 +6,4 @@ const optionKeys = [
   'notifyOnSuccess'
 ];
 
-module.exports = {
-  optionKeys
-};
+export {optionKeys};

@@ -1,3 +1,4 @@
+<!-- prettier-ignore -->
 <template>
 <div id="app" v-if="dataLoaded">
   <div class="section">
@@ -51,7 +52,7 @@
 
 <script>
 import browser from 'webextension-polyfill';
-import _ from 'lodash';
+import {includes, without} from 'lodash-es';
 import draggable from 'vuedraggable';
 import {Checkbox, Switch, Select, FormField} from 'ext-components';
 
@@ -101,12 +102,12 @@ export default {
     getText: getText,
 
     dataTypeEnabled: function(dataType) {
-      return !_.includes(this.options.disabledDataTypes, dataType);
+      return !includes(this.options.disabledDataTypes, dataType);
     },
 
     setDataTypeState: async function(dataType, enabled) {
       if (enabled) {
-        this.options.disabledDataTypes = _.without(
+        this.options.disabledDataTypes = without(
           this.options.disabledDataTypes,
           dataType
         );
@@ -142,17 +143,17 @@ $mdc-theme-primary: #1abc9c;
 @import '@material/theme/mixins';
 @import '@material/typography/mixins';
 
-.mdc-select__menu {
-  top: inherit !important;
-  left: inherit !important;
-}
-
 .mdc-checkbox {
   margin-left: 8px;
 }
 
 .mdc-switch {
   margin-right: 12px;
+}
+
+.mdc-list-item {
+  white-space: nowrap;
+  padding-right: 32px !important;
 }
 
 body {
@@ -171,15 +172,15 @@ body {
 
 .section-title,
 .section-desc {
-  @include mdc-theme-prop('color', 'text-primary-on-light');
+  @include mdc-theme-prop(color, text-primary-on-light);
 }
 
 .section-title {
-  @include mdc-typography('title');
+  @include mdc-typography(headline6);
 }
 
 .section-desc {
-  @include mdc-typography('body1');
+  @include mdc-typography(body2);
   padding-top: 8px;
 }
 

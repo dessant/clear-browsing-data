@@ -1,9 +1,9 @@
 {
   "presets": [
     [
-      "env",
+      "@babel/env",
       {
-        "targets": {"chrome": 55, "firefox": 57, "opera": 42}
+        "modules": false
       }
     ]
   ],

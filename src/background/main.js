@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill';
 
+import {initStorage} from 'storage/init';
 import storage from 'storage/storage';
 import {getText} from 'utils/common';
 import {
@@ -69,7 +70,7 @@ async function clearDataType(dataType, options, enDataTypes = null) {
     if (Object.keys(dataTypes).length) {
       await browser.browsingData.remove({since}, dataTypes);
     }
-  } catch (e) {
+  } catch (err) {
     console.log(e);
     await showNotification('error_dataTypeNotCleared');
     return;
@@ -172,7 +173,7 @@ function addMessageListener() {
 }
 
 async function onLoad() {
-  await storage.init('sync');
+  await initStorage('sync');
   await setBrowserAction();
   addStorageListener();
   addMessageListener();

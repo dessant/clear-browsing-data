@@ -1,3 +1,4 @@
+<!-- prettier-ignore -->
 <template>
 <div id="app" v-show="dataLoaded">
   <div class="header">
@@ -5,11 +6,17 @@
       {{ getText('extensionName') }}
     </div>
     <div class="header-buttons">
-      <img class="contribute-icon"
+      <v-icon-button class="contribute-button"
+          :ripple="false"
           src="/src/contribute/assets/heart.svg"
           @click="showContribute">
-      <img class="settings-icon" src="/src/icons/misc/settings.svg"
-          @click="showSettings = !showSettings"/>
+      </v-icon-button>
+
+      <v-icon-button class="settings-button"
+          :ripple="false"
+          src="/src/icons/misc/time.svg"
+          @click="showSettings = !showSettings">
+      </v-icon-button>
     </div>
   </div>
 
@@ -26,7 +33,7 @@
 
   <div class="list-padding-top"></div>
   <ul class="mdc-list list list-bulk-button" v-if="clearAllDataTypes">
-    <li class="mdc-list-item list-item ripple-surface"
+    <li class="mdc-list-item list-item"
         @click="selectItem('allDataTypes')">
       <img class="mdc-list-item__graphic list-item-icon"
           src="/src/icons/dataTypes/allDataTypes.svg">
@@ -40,7 +47,7 @@
   <div class="list-items-wrap" ref="items" :class="listClasses">
     <resize-observer @notify="handleSizeChange"></resize-observer>
     <ul class="mdc-list list list-items">
-      <li class="mdc-list-item list-item ripple-surface"
+      <li class="mdc-list-item list-item"
           v-for="dataType in dataTypes"
           :key="dataType.id"
           @click="selectItem(dataType)">
@@ -56,7 +63,9 @@
 <script>
 import browser from 'webextension-polyfill';
 import {ResizeObserver} from 'vue-resize';
-import {Select} from 'ext-components';
+import {MDCList} from '@material/list';
+import {MDCRipple} from '@material/ripple';
+import {IconButton, Select} from 'ext-components';
 
 import storage from 'storage/storage';
 import {
@@ -69,6 +78,7 @@ import {optionKeys} from 'utils/data';
 
 export default {
   components: {
+    [IconButton.name]: IconButton,
     [Select.name]: Select,
     [ResizeObserver.name]: ResizeObserver
   },
@@ -139,8 +149,7 @@ export default {
   },
 
   created: async function() {
-    const currentTab = await browser.tabs.getCurrent();
-    this.isPopup = !currentTab || currentTab instanceof Array;
+    this.isPopup = !(await browser.tabs.getCurrent());
     if (!this.isPopup) {
       document.documentElement.style.height = '100%';
       document.body.style.minWidth = 'initial';
@@ -158,6 +167,19 @@ export default {
     });
 
     this.dataLoaded = true;
+  },
+
+  mounted: function() {
+    window.setTimeout(() => {
+      for (const listEl of document.querySelectorAll(
+        '.list-bulk-button, .list-items'
+      )) {
+        const list = new MDCList(listEl);
+        for (const el of list.listElements) {
+          MDCRipple.attachTo(el);
+        }
+      }
+    }, 500);
   }
 };
 </script>
@@ -166,15 +188,16 @@ export default {
 $mdc-theme-primary: #1abc9c;
 
 @import '@material/list/mdc-list';
+@import '@material/select/mdc-select';
+@import '@material/icon-button/mixins';
 @import '@material/theme/mixins';
 @import '@material/typography/mixins';
-@import '@material/ripple/mixins';
 
 @import 'vue-resize/dist/vue-resize';
 
-.mdc-select__menu {
-  top: -48px !important;
-  left: inherit !important;
+.mdc-list-item {
+  white-space: nowrap;
+  padding-right: 32px !important;
 }
 
 body,
@@ -189,7 +212,7 @@ body,
 
 body {
   margin: 0;
-  min-width: 342px;
+  min-width: 355px;
   overflow: hidden;
   @include mdc-typography-base;
   font-size: 100%;
@@ -203,32 +226,33 @@ body {
   white-space: nowrap;
   padding-top: 16px;
   padding-left: 16px;
-  padding-right: 16px;
+  padding-right: 12px;
 }
 
 .title {
   overflow: hidden;
   text-overflow: ellipsis;
-  @include mdc-typography('title');
-  @include mdc-theme-prop('color', 'text-primary-on-light');
+  @include mdc-typography(headline6);
+  @include mdc-theme-prop(color, text-primary-on-light);
 }
 
 .header-buttons {
   display: flex;
   align-items: center;
+  height: 24px;
   margin-left: 56px;
-  @media (max-width: 341px) {
+  @media (max-width: 354px) {
     margin-left: 32px;
   }
 }
 
-.contribute-icon {
-  margin-right: 16px;
-  cursor: pointer;
+.contribute-button,
+.settings-button {
+  @include mdc-icon-button-size(24px, 24px, 8px);
 }
 
-.settings-icon {
-  cursor: pointer;
+.contribute-button {
+  margin-right: 4px;
 }
 
 .settings {
@@ -261,10 +285,12 @@ body {
 }
 
 .list-bulk-button {
+  position: relative;
   height: 48px;
 }
 
 .list-separator {
+  position: relative;
   height: 1px;
 }
 
@@ -288,15 +314,5 @@ body {
 
 .list-item-icon {
   margin-right: 16px !important;
-}
-
-.ripple-surface {
-  @include mdc-ripple-surface;
-  @include mdc-ripple-radius-bounded;
-  @include mdc-states;
-
-  position: sticky;
-  outline: none;
-  overflow: hidden;
 }
 </style>

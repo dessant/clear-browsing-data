@@ -18,8 +18,4 @@ async function getActiveTab() {
   return tab;
 }
 
-module.exports = {
-  getText,
-  createTab,
-  getActiveTab
-};
+export {getText, createTab, getActiveTab};

@@ -4,7 +4,7 @@
 <p align="center">
   </br></br>
   <a href="https://chrome.google.com/webstore/detail/clear-browsing-data/bjilljlpencdcpihofiobpnfgcakfdbe">
-    <img src="https://i.imgur.com/q6E8SOD.png" alt="Chrome Web Store"></a>
+    <img src="https://i.imgur.com/B0i5sn3.png" alt="Chrome Web Store"></a>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/clear-browsing-data/">
     <img src="https://i.imgur.com/dvof8rG.png" alt="Firefox add-ons"></a>
   <a href="https://addons.opera.com/en/extensions/details/clear-browsing-data/">
@@ -12,12 +12,12 @@
   </br></br>
 </p>
 
-## Supporting Clear Browsing Data
+## Supporting the Project
 
 The continued development of Clear Browsing Data is made possible
 thanks to the support of awesome backers. If you'd like to join them,
-please consider contributing with [Patreon](https://goo.gl/qRhKSW),
-[PayPal](https://goo.gl/5FnBaw) or [Bitcoin](https://goo.gl/uJUAaU).
+please consider contributing with [Patreon](https://www.patreon.com/dessant),
+[PayPal](https://www.paypal.me/ArminSebastian) or [Bitcoin](https://goo.gl/uJUAaU).
 
 ## Description
 

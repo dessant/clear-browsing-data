@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import _ from 'lodash';
+import {difference} from 'lodash-es';
 
 import storage from 'storage/storage';
 import {getText, createTab, getActiveTab} from 'utils/common';
@@ -8,7 +8,7 @@ async function getEnabledDataTypes(options) {
   if (typeof options === 'undefined') {
     options = await storage.get(['dataTypes', 'disabledDataTypes'], 'sync');
   }
-  return _.difference(options.dataTypes, options.disabledDataTypes);
+  return difference(options.dataTypes, options.disabledDataTypes);
 }
 
 function getOptionLabels(data, scope = 'optionValue') {
@@ -44,7 +44,7 @@ async function showContributePage(action = false) {
   await createTab(url, activeTab.index + 1);
 }
 
-module.exports = {
+export {
   getEnabledDataTypes,
   getOptionLabels,
   showNotification,
