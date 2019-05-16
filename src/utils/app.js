@@ -25,11 +25,17 @@ function getOptionLabels(data, scope = 'optionValue') {
   return labels;
 }
 
-function showNotification(messageId) {
-  return browser.notifications.create('cbd-notification', {
+function showNotification({message, messageId, title, type = 'info'}) {
+  if (!title) {
+    title = getText('extensionName');
+  }
+  if (messageId) {
+    message = getText(messageId);
+  }
+  return browser.notifications.create(`cbd-notification-${type}`, {
     type: 'basic',
-    title: getText('extensionName'),
-    message: getText(messageId),
+    title: title,
+    message: message,
     iconUrl: '/src/icons/app/icon-48.png'
   });
 }

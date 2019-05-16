@@ -144,7 +144,10 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
       await browser.browsingData.remove({since}, dataTypes);
     }
   } catch (err) {
-    await showNotification('error_dataTypeNotCleared');
+    await showNotification({
+      messageId: 'error_dataTypeNotCleared',
+      type: 'error'
+    });
     throw err;
   }
 
@@ -154,7 +157,12 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
   }
 
   if (options.notifyOnSuccess) {
-    await showNotification('info_dataTypeCleared');
+    const notification = await showNotification({
+      messageId: 'info_dataTypeCleared'
+    });
+    window.setTimeout(() => {
+      browser.notifications.clear(notification);
+    }, 6000); // 6 seconds
   }
 
   if (options.reloadTabs !== 'false') {
@@ -191,7 +199,10 @@ async function onActionClick() {
   const enDataTypes = await getEnabledDataTypes(options);
 
   if (enDataTypes.length === 0) {
-    await showNotification('error_allDataTypesDisabled');
+    await showNotification({
+      messageId: 'error_allDataTypesDisabled',
+      type: 'error'
+    });
     return;
   }
 
