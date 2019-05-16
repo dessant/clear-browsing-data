@@ -12,15 +12,15 @@ import {optionKeys} from 'utils/data';
 import {targetEnv} from 'utils/config';
 
 async function clearDataType(dataType, options = null, enDataTypes = null) {
+  if (!options) {
+    options = await storage.get(optionKeys, 'sync');
+  }
+
   let {useCount} = await storage.get('useCount', 'sync');
   useCount += 1;
   await storage.set({useCount}, 'sync');
-  if ([10, 50].includes(useCount)) {
+  if ([10, 50].includes(useCount) && options.closeTabs !== 'exit') {
     await showContributePage('clear');
-  }
-
-  if (!options) {
-    options = await storage.get(optionKeys, 'sync');
   }
 
   let since;
