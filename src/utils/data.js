@@ -3,6 +3,9 @@ const optionKeys = [
   'disabledDataTypes',
   'clearAllDataTypesAction',
   'clearSince',
+  'closeTabs',
+  'closePinnedTabs',
+  'reloadTabs',
   'notifyOnSuccess'
 ];
 

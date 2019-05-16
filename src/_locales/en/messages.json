@@ -239,6 +239,71 @@
     "description": "Title of the option."
   },
 
+  "optionSectionTitle_tabs": {
+    "message": "Tabs",
+    "description": "Title of the option section."
+  },
+
+  "optionTitle_closeTabs": {
+    "message": "Close tabs",
+    "description": "Title of the option."
+  },
+
+  "optionValue_closeTabs_all": {
+    "message": "All tabs",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_active": {
+    "message": "Active tab",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_allButActive": {
+    "message": "All tabs except active",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_exit": {
+    "message": "All tabs and exit",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_false": {
+    "message": "Disable",
+    "description": "Value of the option."
+  },
+
+  "optionTitle_closePinnedTabs": {
+    "message": "Close pinned tabs",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_reloadTabs": {
+    "message": "Reload tabs",
+    "description": "Title of the option."
+  },
+
+  "optionValue_reloadTabs_all": {
+    "message": "All tabs",
+    "description": "Value of the option."
+  },
+
+  "optionValue_reloadTabs_active": {
+    "message": "Active tab",
+    "description": "Value of the option."
+  },
+
+  "optionValue_reloadTabs_allButActive": {
+    "message": "All tabs except active",
+    "description": "Value of the option."
+  },
+
+  "optionValue_reloadTabs_false": {
+    "message": "Disable",
+    "description": "Value of the option."
+  },
+
   "optionSectionTitle_misc": {
     "message": "Miscellaneous",
     "description": "Title of the option section."
@@ -355,7 +420,7 @@
   },
 
   "error_internalError": {
-    "message": "Something went wrong.",
+    "message": "Something went wrong. Open the browser console for more details.",
     "description": "Error message."
   }
 }

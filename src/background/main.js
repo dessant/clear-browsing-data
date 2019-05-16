@@ -2,7 +2,7 @@ import browser from 'webextension-polyfill';
 
 import {initStorage} from 'storage/init';
 import storage from 'storage/storage';
-import {getText} from 'utils/common';
+import {getText, getActiveTab} from 'utils/common';
 import {
   getEnabledDataTypes,
   showNotification,
@@ -11,12 +11,16 @@ import {
 import {optionKeys} from 'utils/data';
 import {targetEnv} from 'utils/config';
 
-async function clearDataType(dataType, options, enDataTypes = null) {
+async function clearDataType(dataType, options = null, enDataTypes = null) {
   let {useCount} = await storage.get('useCount', 'sync');
   useCount += 1;
   await storage.set({useCount}, 'sync');
   if ([10, 50].includes(useCount)) {
     await showContributePage('clear');
+  }
+
+  if (!options) {
+    options = await storage.get(optionKeys, 'sync');
   }
 
   let since;
@@ -62,6 +66,75 @@ async function clearDataType(dataType, options, enDataTypes = null) {
     dataTypes[dataType] = true;
   }
 
+  let tempTabId;
+  const {id: activeTabId} = await getActiveTab();
+
+  if (options.closeTabs !== 'false') {
+    if (['all', 'allButActive', 'exit'].includes(options.closeTabs)) {
+      const windows = await browser.windows.getAll({populate: true});
+      for (const window of windows) {
+        if (!window.focused) {
+          const tabIds = window.tabs.reduce((results, tab) => {
+            if (!tab.pinned || options.closePinnedTabs) {
+              results.push(tab.id);
+            }
+            return results;
+          }, []);
+          await browser.tabs.remove(tabIds);
+        }
+      }
+    }
+
+    const activeWindow = await browser.windows.getLastFocused({populate: true});
+
+    let pinnedTabIds = [];
+    if (!options.closePinnedTabs) {
+      pinnedTabIds = activeWindow.tabs.reduce((results, tab) => {
+        if (tab.pinned) {
+          results.push(tab.id);
+        }
+        return results;
+      }, []);
+    }
+
+    if (options.closeTabs === 'all') {
+      if (!pinnedTabIds.length) {
+        ({id: tempTabId} = await browser.tabs.create({active: false}));
+      }
+      const tabIds = activeWindow.tabs.reduce((results, tab) => {
+        if (!pinnedTabIds.includes(tab.id)) {
+          results.push(tab.id);
+        }
+        return results;
+      }, []);
+
+      await browser.tabs.remove(tabIds);
+    } else if (options.closeTabs === 'active') {
+      if (!pinnedTabIds.length && activeWindow.tabs.length === 1) {
+        ({id: tempTabId} = await browser.tabs.create({active: false}));
+      }
+
+      if (!pinnedTabIds.includes(activeTabId)) {
+        await browser.tabs.remove(activeTabId);
+      }
+    } else if (options.closeTabs === 'allButActive') {
+      const tabIds = activeWindow.tabs.reduce((results, tab) => {
+        if (!pinnedTabIds.includes(tab.id) && tab.id !== activeTabId) {
+          results.push(tab.id);
+        }
+        return results;
+      }, []);
+
+      await browser.tabs.remove(tabIds);
+    } else if (options.closeTabs === 'exit') {
+      ({id: tempTabId} = await browser.tabs.create({
+        url: 'about:blank',
+        active: false
+      }));
+      await browser.tabs.remove(activeWindow.tabs.map(tab => tab.id));
+    }
+  }
+
   try {
     if (dataTypes.localStorage && since && targetEnv === 'firefox') {
       await browser.browsingData.removeLocalStorage({});
@@ -71,13 +144,45 @@ async function clearDataType(dataType, options, enDataTypes = null) {
       await browser.browsingData.remove({since}, dataTypes);
     }
   } catch (err) {
-    console.log(e);
     await showNotification('error_dataTypeNotCleared');
+    throw err;
+  }
+
+  if (options.closeTabs === 'exit') {
+    browser.tabs.remove(tempTabId);
     return;
   }
 
   if (options.notifyOnSuccess) {
     await showNotification('info_dataTypeCleared');
+  }
+
+  if (options.reloadTabs !== 'false') {
+    if (options.reloadTabs === 'all') {
+      const reloadingTabs = [];
+      const tabs = await browser.tabs.query({});
+      for (const tab of tabs) {
+        if (tab.id !== tempTabId) {
+          reloadingTabs.push(browser.tabs.reload(tab.id, {bypassCache: true}));
+        }
+      }
+
+      await Promise.all(reloadingTabs);
+    } else if (options.reloadTabs === 'active') {
+      if (['allButActive', 'false'].includes(options.closeTabs)) {
+        await browser.tabs.reload(activeTabId, {bypassCache: true});
+      }
+    } else if (options.reloadTabs === 'allButActive') {
+      const reloadingTabs = [];
+      const tabs = await browser.tabs.query({});
+      for (const tab of tabs) {
+        if (![activeTabId, tempTabId].includes(tab.id)) {
+          reloadingTabs.push(browser.tabs.reload(tab.id, {bypassCache: true}));
+        }
+      }
+
+      await Promise.all(reloadingTabs);
+    }
   }
 }
 
@@ -101,11 +206,7 @@ async function onActionClick() {
 }
 
 async function onActionPopupClick(dataType) {
-  const options = await storage.get(
-    ['dataTypes', 'disabledDataTypes', 'clearSince', 'notifyOnSuccess'],
-    'sync'
-  );
-  await clearDataType(dataType, options);
+  await clearDataType(dataType);
 }
 
 function onMessage(request, sender, sendResponse) {

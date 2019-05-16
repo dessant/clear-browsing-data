@@ -23,6 +23,36 @@
 
   <div class="section">
     <div class="section-title" v-once>
+      {{ getText('optionSectionTitle_tabs') }}
+    </div>
+    <div class="option-wrap">
+      <div class="option select">
+        <v-select :label="getText('optionTitle_closeTabs')"
+            v-model="options.closeTabs"
+            :options="selectOptions.closeTabs">
+        </v-select>
+      </div>
+      <div class="option"
+          v-show="!['exit', 'false'].includes(options.closeTabs)">
+        <v-form-field input-id="cpt"
+            :label="getText('optionTitle_closePinnedTabs')">
+          <v-switch id="cpt"
+              v-model="options.closePinnedTabs">
+          </v-switch>
+        </v-form-field>
+      </div>
+      <div class="option select"
+          v-show="options.closeTabs !== 'exit'">
+        <v-select :label="getText('optionTitle_reloadTabs')"
+            v-model="options.reloadTabs"
+            :options="selectOptions.reloadTabs">
+        </v-select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title" v-once>
       {{ getText('optionSectionTitle_misc') }}
     </div>
     <div class="option-wrap">
@@ -75,6 +105,8 @@ export default {
       dataLoaded: false,
 
       selectOptions: getOptionLabels({
+        closeTabs: ['all', 'active', 'allButActive', 'exit', 'false'],
+        reloadTabs: ['all', 'active', 'allButActive', 'false'],
         clearAllDataTypesAction: ['main', 'sub', 'false'],
         clearSince: [
           '1hour',
@@ -93,6 +125,9 @@ export default {
         disabledDataTypes: [],
         clearAllDataTypesAction: '',
         clearSince: '',
+        closeTabs: '',
+        closePinnedTabs: false,
+        reloadTabs: '',
         notifyOnSuccess: false
       }
     };
