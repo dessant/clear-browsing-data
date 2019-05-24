@@ -186,11 +186,6 @@ $mdc-theme-primary: #1abc9c;
   margin-right: 12px;
 }
 
-.mdc-list-item {
-  white-space: nowrap;
-  padding-right: 32px !important;
-}
-
 body {
   min-width: 600px;
   @include mdc-typography-base;
