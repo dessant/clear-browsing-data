@@ -1,0 +1,26 @@
+jobs:
+  fast_finish: true
+  include:
+    - stage: build
+      install: docker build --tag ci .ci
+      script: docker run --init --rm -e TRAVIS_TAG --mount type=bind,source="${PWD}",target=/app ci
+      os: linux
+      dist: xenial
+      language: generic
+      services:
+        - docker
+
+before_deploy: sha256sum artifacts/*/*
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "W6gys/WTfZLo/QLzlr5QglqjcukANnFxxTeYre/mOaReFESuaIL+Z/1MP1F6kC0jA8SHxPpKXfI7ktX4SFdysP9RNPN06eVB2a1fvyb/koW4AYvHBvO4bpSAOn9k6wIg8GzgJAF1oXGb1+7vZpCOUHNNX/mXpP6yqLPgTn9VvGAN+8LlHiUzJhfDMshXcmCwUxzknphN0PnkkSo/DbjP+63gHWYq6+21aGo1eXPVWnOjejwDNe1lQpZjgRCcIr05pi1oeMkOZGL8aH8CdhWlP0+GPkJvvQuqYipUm/E3kkbx41fB3WxZrorJFvC5Aa/d5j/6BtrlIq1+JApibdSxoxTJkxJbTW/9CBwf4AXo7otReJFDbpS3M1RcxPoIAPg1U4djJBkXmJaUBcdpRvjklSHXsupxnEO9RVYEqGaIpaoXGuH8i3AZiy5qQ2D4+lCa6bTg4PNwTEumEWsh6u+hI8Ko6slAaR1md0XsL93qiYua+qgl+lPEMgZ1bFe0ey290MH87WwyVfttinKNKPOgpDKgKqe9H5tuQbROLlWAtEsP0xfU/mgB2cyBk1aNtXc1wwzBJhBnIGWqTE+0PAnYDsdLvQiRy+0BqOSs9lXS1NQACW6xaPH19xPvm2XcMgZGUJAi9PKvY7MORNJrkP+NVJwAjlraR4bPK1RmbUJD4Oo="
+  draft: true
+  file: artifacts/*/*
+  file_glob: true
+  overwrite: true
+  skip_cleanup: true
+  body: 'Download and install the extension from the [extension store](https://github.com/dessant/clear-browsing-data#readme) of your browser.<br>Learn more about this release from the [changelog](https://github.com/dessant/clear-browsing-data/blob/master/CHANGELOG.md#changelog).<br><br>The assets listed below are not for general use.'
+  on:
+    tags: true
