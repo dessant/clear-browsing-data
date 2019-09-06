@@ -29,6 +29,18 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
   } else {
     let timeDelta;
     switch (options.clearSince) {
+      case '1minute':
+        timeDelta = 1000 * 60;
+        break;
+      case '3minutes':
+        timeDelta = 1000 * 60 * 3;
+        break;
+      case '10minutes':
+        timeDelta = 1000 * 60 * 10;
+        break;
+      case '30minutes':
+        timeDelta = 1000 * 60 * 30;
+        break;
       case '1hour':
         timeDelta = 1000 * 60 * 60;
         break;

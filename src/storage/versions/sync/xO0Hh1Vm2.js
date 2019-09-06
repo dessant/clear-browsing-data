@@ -54,7 +54,7 @@ async function upgrade() {
     dataTypes,
     disabledDataTypes,
     clearAllDataTypesAction: 'sub', // 'main', 'sub', 'false'
-    clearSince: 'epoch', // '1hour', '3hours', '1day', '1week', '4weeks', '90days', '365days', 'epoch'
+    clearSince: 'epoch', // '1minute', '3minutes', '10minutes', '30minutes', 1hour', '3hours', '1day', '1week', '4weeks', '90days', '365days', 'epoch'
     notifyOnSuccess: true
   };
 

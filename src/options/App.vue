@@ -109,6 +109,10 @@ export default {
         reloadTabs: ['all', 'active', 'allButActive', 'false'],
         clearAllDataTypesAction: ['main', 'sub', 'false'],
         clearSince: [
+          '1minute',
+          '3minutes',
+          '10minutes',
+          '30minutes',
           '1hour',
           '3hours',
           '1day',

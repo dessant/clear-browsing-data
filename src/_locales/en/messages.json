@@ -334,6 +334,26 @@
     "description": "Title of the option."
   },
 
+  "optionValue_clearSince_1minute": {
+    "message": "Last minute",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_3minutes": {
+    "message": "Last 3 minutes",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_10minutes": {
+    "message": "Last 10 minutes",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_30minutes": {
+    "message": "Last 30 minutes",
+    "description": "Value of the option."
+  },
+
   "optionValue_clearSince_1hour": {
     "message": "Last hour",
     "description": "Value of the option."
