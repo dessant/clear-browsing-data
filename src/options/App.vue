@@ -8,7 +8,7 @@
     <div class="section-desc" v-once>
       {{ getText('optionSectionDescription_dataTypes') }}
     </div>
-    <v-draggable class="option-wrap" :list="options.dataTypes">
+    <v-draggable class="option-wrap engines" :list="options.dataTypes">
       <div class="option"
           v-for="dataType in options.dataTypes" :key="dataType.id">
         <v-form-field :input-id="dataType"
@@ -220,9 +220,13 @@ body {
 
 .option-wrap {
   display: grid;
-  grid-row-gap: 12px;
+  grid-row-gap: 24px;
   padding-top: 16px;
   grid-auto-columns: min-content;
+
+  &.engines {
+    grid-row-gap: 12px;
+  }
 }
 
 .option {
