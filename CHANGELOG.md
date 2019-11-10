@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.1](https://github.com/dessant/clear-browsing-data/compare/v2.4.0...v2.4.1) (2019-11-10)
+
+
+### Bug Fixes
+
+* hide scrollbar during action popup height transitions ([65b2d82](https://github.com/dessant/clear-browsing-data/commit/65b2d828f06ac2811907b33b76d458fcba95318f))
+* increase spacing between option components ([cba69fe](https://github.com/dessant/clear-browsing-data/commit/cba69fe14f8cb68740d8819aa3a235de5bc87551))
+* remove unused permission ([1ddf2bd](https://github.com/dessant/clear-browsing-data/commit/1ddf2bdc7e81906dfebea3b5ae244aeb730d4e31))
+
 ## [2.4.0](https://github.com/dessant/clear-browsing-data/compare/v2.3.0...v2.4.0) (2019-09-06)
 
 
