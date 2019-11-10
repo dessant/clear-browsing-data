@@ -16,7 +16,7 @@
   "minimum_chrome_version": "55.0",
   "minimum_opera_version": "42.0",
 
-  "permissions": ["browsingData", "notifications", "storage", "<all_urls>"],
+  "permissions": ["browsingData", "notifications", "storage"],
 
   "content_security_policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src *; media-src 'none'; object-src 'none'; child-src 'none'; form-action 'none'; sandbox allow-same-origin allow-scripts;",
 
