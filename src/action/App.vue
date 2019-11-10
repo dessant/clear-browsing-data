@@ -1,63 +1,77 @@
-<!-- prettier-ignore -->
 <template>
-<div id="app" v-show="dataLoaded">
-  <div class="header">
-    <div class="title">
-      {{ getText('extensionName') }}
-    </div>
-    <div class="header-buttons">
-      <v-icon-button class="contribute-button"
+  <div id="app" v-show="dataLoaded">
+    <div class="header">
+      <div class="title">
+        {{ getText('extensionName') }}
+      </div>
+      <div class="header-buttons">
+        <v-icon-button
+          class="contribute-button"
           :ripple="false"
           src="/src/contribute/assets/heart.svg"
-          @click="showContribute">
-      </v-icon-button>
+          @click="showContribute"
+        >
+        </v-icon-button>
 
-      <v-icon-button class="settings-button"
+        <v-icon-button
+          class="settings-button"
           :ripple="false"
           src="/src/icons/misc/time.svg"
-          @click="showSettings = !showSettings">
-      </v-icon-button>
+          @click="showSettings = !showSettings"
+        >
+        </v-icon-button>
+      </div>
     </div>
-  </div>
 
-  <transition name="settings"
+    <transition
+      name="settings"
       @after-enter="handleSizeChange"
-      @after-leave="handleSizeChange">
-    <div class="settings" v-if="showSettings">
-      <v-select :label="getText('optionTitle_clearSince')"
+      @after-leave="handleSizeChange"
+    >
+      <div class="settings" v-if="showSettings">
+        <v-select
+          :label="getText('optionTitle_clearSince')"
           v-model="clearSince"
-          :options="selectOptions.clearSince">
-      </v-select>
-    </div>
-  </transition>
+          :options="selectOptions.clearSince"
+        >
+        </v-select>
+      </div>
+    </transition>
 
-  <div class="list-padding-top"></div>
-  <ul class="mdc-list list list-bulk-button" v-if="clearAllDataTypes">
-    <li class="mdc-list-item list-item"
-        @click="selectItem('allDataTypes')">
-      <img class="mdc-list-item__graphic list-item-icon"
-          src="/src/icons/dataTypes/allDataTypes.svg">
-      {{ getText('menuItemTitle_allDataTypes') }}
-    </li>
-  </ul>
-  <ul class="mdc-list list list-separator"
-      v-if="clearAllDataTypes || hasScrollBar">
-    <li role="separator" class="mdc-list-divider"></li>
-  </ul>
-  <div class="list-items-wrap" ref="items" :class="listClasses">
-    <resize-observer @notify="handleSizeChange"></resize-observer>
-    <ul class="mdc-list list list-items">
-      <li class="mdc-list-item list-item"
-          v-for="dataType in dataTypes"
-          :key="dataType.id"
-          @click="selectItem(dataType)">
-        <img class="mdc-list-item__graphic list-item-icon"
-            :src="`/src/icons/dataTypes/${dataType}.svg`">
-        {{ getText(`menuItemTitle_${dataType}`) }}
+    <div class="list-padding-top"></div>
+    <ul class="mdc-list list list-bulk-button" v-if="clearAllDataTypes">
+      <li class="mdc-list-item list-item" @click="selectItem('allDataTypes')">
+        <img
+          class="mdc-list-item__graphic list-item-icon"
+          src="/src/icons/dataTypes/allDataTypes.svg"
+        />
+        {{ getText('menuItemTitle_allDataTypes') }}
       </li>
     </ul>
+    <ul
+      class="mdc-list list list-separator"
+      v-if="clearAllDataTypes || hasScrollBar"
+    >
+      <li role="separator" class="mdc-list-divider"></li>
+    </ul>
+    <div class="list-items-wrap" ref="items" :class="listClasses">
+      <resize-observer @notify="handleSizeChange"></resize-observer>
+      <ul class="mdc-list list list-items">
+        <li
+          class="mdc-list-item list-item"
+          v-for="dataType in dataTypes"
+          :key="dataType.id"
+          @click="selectItem(dataType)"
+        >
+          <img
+            class="mdc-list-item__graphic list-item-icon"
+            :src="`/src/icons/dataTypes/${dataType}.svg`"
+          />
+          {{ getText(`menuItemTitle_${dataType}`) }}
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
 </template>
 
 <script>

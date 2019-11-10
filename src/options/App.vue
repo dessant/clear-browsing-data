@@ -1,83 +1,100 @@
-<!-- prettier-ignore -->
 <template>
-<div id="app" v-if="dataLoaded">
-  <div class="section">
-    <div class="section-title" v-once>
-      {{ getText('optionSectionTitle_dataTypes') }}
-    </div>
-    <div class="section-desc" v-once>
-      {{ getText('optionSectionDescription_dataTypes') }}
-    </div>
-    <v-draggable class="option-wrap engines" :list="options.dataTypes">
-      <div class="option"
-          v-for="dataType in options.dataTypes" :key="dataType.id">
-        <v-form-field :input-id="dataType"
-            :label="getText(`optionTitle_${dataType}`)">
-          <v-checkbox :id="dataType" :checked="dataTypeEnabled(dataType)"
-              @change="setDataTypeState(dataType, $event)">
-          </v-checkbox>
-        </v-form-field>
+  <div id="app" v-if="dataLoaded">
+    <div class="section">
+      <div class="section-title" v-once>
+        {{ getText('optionSectionTitle_dataTypes') }}
       </div>
-    </v-draggable>
-  </div>
-
-  <div class="section">
-    <div class="section-title" v-once>
-      {{ getText('optionSectionTitle_tabs') }}
+      <div class="section-desc" v-once>
+        {{ getText('optionSectionDescription_dataTypes') }}
+      </div>
+      <v-draggable class="option-wrap engines" :list="options.dataTypes">
+        <div
+          class="option"
+          v-for="dataType in options.dataTypes"
+          :key="dataType.id"
+        >
+          <v-form-field
+            :input-id="dataType"
+            :label="getText(`optionTitle_${dataType}`)"
+          >
+            <v-checkbox
+              :id="dataType"
+              :checked="dataTypeEnabled(dataType)"
+              @change="setDataTypeState(dataType, $event)"
+            >
+            </v-checkbox>
+          </v-form-field>
+        </div>
+      </v-draggable>
     </div>
-    <div class="option-wrap">
-      <div class="option select">
-        <v-select :label="getText('optionTitle_closeTabs')"
+
+    <div class="section">
+      <div class="section-title" v-once>
+        {{ getText('optionSectionTitle_tabs') }}
+      </div>
+      <div class="option-wrap">
+        <div class="option select">
+          <v-select
+            :label="getText('optionTitle_closeTabs')"
             v-model="options.closeTabs"
-            :options="selectOptions.closeTabs">
-        </v-select>
-      </div>
-      <div class="option"
-          v-show="!['exit', 'false'].includes(options.closeTabs)">
-        <v-form-field input-id="cpt"
-            :label="getText('optionTitle_closePinnedTabs')">
-          <v-switch id="cpt"
-              v-model="options.closePinnedTabs">
-          </v-switch>
-        </v-form-field>
-      </div>
-      <div class="option select"
-          v-show="options.closeTabs !== 'exit'">
-        <v-select :label="getText('optionTitle_reloadTabs')"
+            :options="selectOptions.closeTabs"
+          >
+          </v-select>
+        </div>
+        <div
+          class="option"
+          v-show="!['exit', 'false'].includes(options.closeTabs)"
+        >
+          <v-form-field
+            input-id="cpt"
+            :label="getText('optionTitle_closePinnedTabs')"
+          >
+            <v-switch id="cpt" v-model="options.closePinnedTabs"> </v-switch>
+          </v-form-field>
+        </div>
+        <div class="option select" v-show="options.closeTabs !== 'exit'">
+          <v-select
+            :label="getText('optionTitle_reloadTabs')"
             v-model="options.reloadTabs"
-            :options="selectOptions.reloadTabs">
-        </v-select>
+            :options="selectOptions.reloadTabs"
+          >
+          </v-select>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title" v-once>
-      {{ getText('optionSectionTitle_misc') }}
-    </div>
-    <div class="option-wrap">
-      <div class="option select">
-        <v-select :label="getText('optionTitle_clearAllDataTypes')"
+    <div class="section">
+      <div class="section-title" v-once>
+        {{ getText('optionSectionTitle_misc') }}
+      </div>
+      <div class="option-wrap">
+        <div class="option select">
+          <v-select
+            :label="getText('optionTitle_clearAllDataTypes')"
             v-model="options.clearAllDataTypesAction"
-            :options="selectOptions.clearAllDataTypesAction">
-        </v-select>
-      </div>
-      <div class="option select">
-        <v-select :label="getText('optionTitle_clearSince')"
+            :options="selectOptions.clearAllDataTypesAction"
+          >
+          </v-select>
+        </div>
+        <div class="option select">
+          <v-select
+            :label="getText('optionTitle_clearSince')"
             v-model="options.clearSince"
-            :options="selectOptions.clearSince">
-        </v-select>
-      </div>
-      <div class="option">
-        <v-form-field input-id="nos"
-            :label="getText('optionTitle_notifyOnSuccess')">
-          <v-switch id="nos" v-model="options.notifyOnSuccess"></v-switch>
-        </v-form-field>
+            :options="selectOptions.clearSince"
+          >
+          </v-select>
+        </div>
+        <div class="option">
+          <v-form-field
+            input-id="nos"
+            :label="getText('optionTitle_notifyOnSuccess')"
+          >
+            <v-switch id="nos" v-model="options.notifyOnSuccess"></v-switch>
+          </v-form-field>
+        </div>
       </div>
     </div>
   </div>
-
-</div>
 </template>
 
 <script>
