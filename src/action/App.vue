@@ -199,6 +199,11 @@ $mdc-theme-primary: #1abc9c;
 
 @import 'vue-resize/dist/vue-resize';
 
+html,
+body {
+  overflow: hidden;
+}
+
 body,
 #app {
   height: 100%;
@@ -212,7 +217,6 @@ body,
 body {
   margin: 0;
   min-width: 355px;
-  overflow: hidden;
   @include mdc-typography-base;
   font-size: 100%;
   background-color: #ffffff;
