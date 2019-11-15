@@ -25,13 +25,16 @@ please consider contributing with
 
 Clear Browsing Data is a browser extension which enables you to delete
 browsing data, such as cookies, history and cache, directly
-from the browser toolbar.
+from the browser toolbar. The toolbar button can be configured
+to clear all browsing data with a single click,
+and the extension also supports closing and reloading tabs.
 
 Supported data types:
 
 * Cookies
 * Browsing history
 * Cached images and files
+* Cache storage data
 * Autofill form data
 * Download history
 * Service Workers
@@ -42,7 +45,6 @@ Supported data types:
 * Web SQL data
 * Saved passwords
 * Application Cache
-* Server-bound certificates
 
 ## Screenshots
 
