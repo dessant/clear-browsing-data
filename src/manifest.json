@@ -10,11 +10,11 @@
   "applications": {
     "gecko": {
       "id": "{ce9f4b1f-24b8-4e9a-9051-b9e472b1b2f2}",
-      "strict_min_version": "57.0"
+      "strict_min_version": "68.0"
     }
   },
-  "minimum_chrome_version": "55.0",
-  "minimum_opera_version": "42.0",
+  "minimum_chrome_version": "76.0",
+  "minimum_opera_version": "63.0",
 
   "permissions": ["browsingData", "notifications", "storage"],
 

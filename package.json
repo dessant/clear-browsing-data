@@ -30,9 +30,9 @@
     "release": "standard-version"
   },
   "browserslist": [
-    "Chrome >= 55",
-    "Firefox >= 57",
-    "Opera >= 42"
+    "Chrome >= 76",
+    "Firefox >= 68",
+    "Opera >= 63"
   ],
   "dependencies": {
     "@material/icon-button": "^4.0.0",

@@ -19,6 +19,11 @@
     "description": "Title of the action."
   },
 
+  "actionTitle_cacheStorage": {
+    "message": "Clear cache storage",
+    "description": "Title of the action."
+  },
+
   "actionTitle_cookies": {
     "message": "Clear cookies",
     "description": "Title of the action."
@@ -64,11 +69,6 @@
     "description": "Title of the action."
   },
 
-  "actionTitle_serverBoundCertificates": {
-    "message": "Clear server-bound certificates",
-    "description": "Title of the action."
-  },
-
   "actionTitle_serviceWorkers": {
     "message": "Clear Service Workers",
     "description": "Title of the action."
@@ -91,6 +91,11 @@
 
   "menuItemTitle_cache": {
     "message": "Cache",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_cacheStorage": {
+    "message": "Cache storage",
     "description": "Title of the menu item."
   },
 
@@ -139,11 +144,6 @@
     "description": "Title of the menu item."
   },
 
-  "menuItemTitle_serverBoundCertificates": {
-    "message": "Server-bound certificates",
-    "description": "Title of the menu item."
-  },
-
   "menuItemTitle_serviceWorkers": {
     "message": "Service Workers",
     "description": "Title of the menu item."
@@ -176,6 +176,11 @@
 
   "optionTitle_cache": {
     "message": "Cached images and files",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_cacheStorage": {
+    "message": "Cache storage data",
     "description": "Title of the option."
   },
 
@@ -226,11 +231,6 @@
 
   "optionTitle_serviceWorkers": {
     "message": "Service Workers",
-    "description": "Title of the option."
-  },
-
-  "optionTitle_serverBoundCertificates": {
-    "message": "Server-bound certificates",
     "description": "Title of the option."
   },
 
