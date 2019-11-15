@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/dessant/clear-browsing-data/compare/v2.4.1...v3.0.0) (2019-11-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* browser versions before Chrome 76, Firefox 68 and Opera 63
+are no longer supported.
+
+### Features
+
+* add cacheStorage and remove serverBoundCertificates in Chrome and Opera ([c102d6c](https://github.com/dessant/clear-browsing-data/commit/c102d6cabf684fa9d7526a1616dcfe74721739f3))
+
 ### [2.4.1](https://github.com/dessant/clear-browsing-data/compare/v2.4.0...v2.4.1) (2019-11-10)
 
 
