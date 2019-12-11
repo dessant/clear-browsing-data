@@ -7,7 +7,6 @@
       <div class="header-buttons">
         <v-icon-button
           class="contribute-button"
-          :ripple="false"
           src="/src/contribute/assets/heart.svg"
           @click="showContribute"
         >
@@ -15,24 +14,39 @@
 
         <v-icon-button
           class="settings-button"
-          :ripple="false"
           src="/src/icons/misc/time.svg"
-          @click="showSettings = !showSettings"
+          @click="showActionSettings = !showActionSettings"
+        >
+        </v-icon-button>
+
+        <v-icon-button
+          class="menu-button"
+          src="/src/icons/misc/more.svg"
+          @click="showActionMenu"
         >
         </v-icon-button>
       </div>
+
+      <v-menu
+        ref="actionMenu"
+        class="action-menu"
+        :ripple="true"
+        :items="listItems.actionMenu"
+        @selected="onActionMenuSelect"
+      ></v-menu>
     </div>
 
     <transition
       name="settings"
-      @after-enter="handleSizeChange"
+      @after-enter="settingsAfterEnter"
       @after-leave="handleSizeChange"
     >
-      <div class="settings" v-if="showSettings">
+      <div class="settings" v-if="showActionSettings">
         <v-select
+          ref="clearSinceSelect"
           :label="getText('optionTitle_clearSince')"
           v-model="clearSince"
-          :options="selectOptions.clearSince"
+          :options="listItems.clearSince"
         >
         </v-select>
       </div>
@@ -79,13 +93,14 @@ import browser from 'webextension-polyfill';
 import {ResizeObserver} from 'vue-resize';
 import {MDCList} from '@material/list';
 import {MDCRipple} from '@material/ripple';
-import {IconButton, Select} from 'ext-components';
+import {IconButton, Select, Menu} from 'ext-components';
 
 import storage from 'storage/storage';
 import {
   getEnabledDataTypes,
-  getOptionLabels,
-  showContributePage
+  getListItems,
+  showContributePage,
+  showProjectPage
 } from 'utils/app';
 import {getText} from 'utils/common';
 import {optionKeys} from 'utils/data';
@@ -94,6 +109,7 @@ export default {
   components: {
     [IconButton.name]: IconButton,
     [Select.name]: Select,
+    [Menu.name]: Menu,
     [ResizeObserver.name]: ResizeObserver
   },
 
@@ -101,23 +117,33 @@ export default {
     return {
       dataLoaded: false,
 
-      showSettings: false,
-      selectOptions: getOptionLabels({
-        clearSince: [
-          '1minute',
-          '3minutes',
-          '10minutes',
-          '30minutes',
-          '1hour',
-          '3hours',
-          '1day',
-          '1week',
-          '4weeks',
-          '90days',
-          '365days',
-          'epoch'
-        ]
-      }),
+      showActionSettings: false,
+
+      listItems: {
+        ...getListItems(
+          {
+            clearSince: [
+              '1minute',
+              '3minutes',
+              '10minutes',
+              '30minutes',
+              '1hour',
+              '3hours',
+              '1day',
+              '1week',
+              '4weeks',
+              '90days',
+              '365days',
+              'epoch'
+            ]
+          },
+          {scope: 'optionValue_clearSince'}
+        ),
+        ...getListItems(
+          {actionMenu: ['options', 'website']},
+          {scope: 'actionMenu'}
+        )
+      },
       hasScrollBar: false,
       isPopup: false,
 
@@ -152,6 +178,28 @@ export default {
       this.closeAction();
     },
 
+    showOptions: async function() {
+      await browser.runtime.openOptionsPage();
+      this.closeAction();
+    },
+
+    showWebsite: async function() {
+      await showProjectPage();
+      this.closeAction();
+    },
+
+    showActionMenu: function() {
+      this.$refs.actionMenu.$emit('open');
+    },
+
+    onActionMenuSelect: async function(item) {
+      if (item === 'options') {
+        await this.showOptions();
+      } else if (item === 'website') {
+        await this.showWebsite();
+      }
+    },
+
     closeAction: async function() {
       if (!this.isPopup) {
         browser.tabs.remove((await browser.tabs.getCurrent()).id);
@@ -163,6 +211,13 @@ export default {
     handleSizeChange: function() {
       const items = this.$refs.items;
       this.hasScrollBar = items.scrollHeight > items.clientHeight;
+    },
+
+    settingsAfterEnter: function() {
+      this.handleSizeChange();
+      this.$refs.clearSinceSelect.$el
+        .querySelector('.mdc-select__selected-text')
+        .focus();
     }
   },
 
@@ -230,7 +285,7 @@ body,
 
 body {
   margin: 0;
-  min-width: 355px;
+  min-width: 387px;
   @include mdc-typography-base;
   font-size: 100%;
   background-color: #ffffff;
@@ -243,7 +298,7 @@ body {
   white-space: nowrap;
   padding-top: 16px;
   padding-left: 16px;
-  padding-right: 12px;
+  padding-right: 8px;
 }
 
 .title {
@@ -258,18 +313,37 @@ body {
   align-items: center;
   height: 24px;
   margin-left: 56px;
-  @media (max-width: 354px) {
+  @media (max-width: 386px) {
     margin-left: 32px;
   }
 }
 
 .contribute-button,
-.settings-button {
-  @include mdc-icon-button-icon-size(24px, 24px, 8px);
+.settings-button,
+.menu-button {
+  @include mdc-icon-button-icon-size(24px, 24px, 6px);
+
+  &::before {
+    --mdc-ripple-fg-size: 20px;
+    --mdc-ripple-fg-scale: 1.8;
+    --mdc-ripple-left: 8px;
+    --mdc-ripple-top: 8px;
+  }
 }
 
 .contribute-button {
+  margin-right: 8px;
+}
+
+.settings-button {
   margin-right: 4px;
+}
+
+.action-menu {
+  left: auto !important;
+  top: 56px !important;
+  right: 16px;
+  transform-origin: top right !important;
 }
 
 .settings {

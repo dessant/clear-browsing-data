@@ -37,7 +37,7 @@
           <v-select
             :label="getText('optionTitle_closeTabs')"
             v-model="options.closeTabs"
-            :options="selectOptions.closeTabs"
+            :options="listItems.closeTabs"
           >
           </v-select>
         </div>
@@ -56,7 +56,7 @@
           <v-select
             :label="getText('optionTitle_reloadTabs')"
             v-model="options.reloadTabs"
-            :options="selectOptions.reloadTabs"
+            :options="listItems.reloadTabs"
           >
           </v-select>
         </div>
@@ -72,7 +72,7 @@
           <v-select
             :label="getText('optionTitle_clearAllDataTypes')"
             v-model="options.clearAllDataTypesAction"
-            :options="selectOptions.clearAllDataTypesAction"
+            :options="listItems.clearAllDataTypesAction"
           >
           </v-select>
         </div>
@@ -80,7 +80,7 @@
           <v-select
             :label="getText('optionTitle_clearSince')"
             v-model="options.clearSince"
-            :options="selectOptions.clearSince"
+            :options="listItems.clearSince"
           >
           </v-select>
         </div>
@@ -104,7 +104,7 @@ import draggable from 'vuedraggable';
 import {Checkbox, Switch, Select, FormField} from 'ext-components';
 
 import storage from 'storage/storage';
-import {getOptionLabels} from 'utils/app';
+import {getListItems} from 'utils/app';
 import {getText} from 'utils/common';
 import {optionKeys} from 'utils/data';
 
@@ -121,25 +121,45 @@ export default {
     return {
       dataLoaded: false,
 
-      selectOptions: getOptionLabels({
-        closeTabs: ['all', 'active', 'allButActive', 'exit', 'false'],
-        reloadTabs: ['all', 'active', 'allButActive', 'false'],
-        clearAllDataTypesAction: ['main', 'sub', 'false'],
-        clearSince: [
-          '1minute',
-          '3minutes',
-          '10minutes',
-          '30minutes',
-          '1hour',
-          '3hours',
-          '1day',
-          '1week',
-          '4weeks',
-          '90days',
-          '365days',
-          'epoch'
-        ]
-      }),
+      listItems: {
+        ...getListItems(
+          {
+            closeTabs: ['all', 'active', 'allButActive', 'exit', 'false']
+          },
+          {scope: 'optionValue_closeTabs'}
+        ),
+        ...getListItems(
+          {
+            reloadTabs: ['all', 'active', 'allButActive', 'false']
+          },
+          {scope: 'optionValue_reloadTabs'}
+        ),
+        ...getListItems(
+          {
+            clearAllDataTypesAction: ['main', 'sub', 'false']
+          },
+          {scope: 'optionValue_clearAllDataTypesAction'}
+        ),
+        ...getListItems(
+          {
+            clearSince: [
+              '1minute',
+              '3minutes',
+              '10minutes',
+              '30minutes',
+              '1hour',
+              '3hours',
+              '1day',
+              '1week',
+              '4weeks',
+              '90days',
+              '365days',
+              'epoch'
+            ]
+          },
+          {scope: 'optionValue_clearSince'}
+        )
+      },
 
       options: {
         dataTypes: [],
@@ -196,6 +216,7 @@ export default {
 <style lang="scss">
 $mdc-theme-primary: #1abc9c;
 
+@import '@material/select/mdc-select';
 @import '@material/theme/mixins';
 @import '@material/typography/mixins';
 

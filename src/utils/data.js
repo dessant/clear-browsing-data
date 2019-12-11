@@ -9,4 +9,6 @@ const optionKeys = [
   'notifyOnSuccess'
 ];
 
-export {optionKeys};
+const projectUrl = 'https://github.com/dessant/clear-browsing-data';
+
+export {optionKeys, projectUrl};
