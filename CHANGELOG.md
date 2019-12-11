@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/dessant/clear-browsing-data/compare/v3.0.0...v3.1.0) (2019-12-11)
+
+
+### Features
+
+* add overflow menu with options and website buttons ([82f3f3c](https://github.com/dessant/clear-browsing-data/commit/82f3f3ca4ac66292644a6e027798b6c503234863))
+
 ## [3.0.0](https://github.com/dessant/clear-browsing-data/compare/v2.4.1...v3.0.0) (2019-11-15)
 
 
