@@ -7,7 +7,7 @@
       <div class="section-desc" v-once>
         {{ getText('optionSectionDescription_dataTypes') }}
       </div>
-      <v-draggable class="option-wrap engines" :list="options.dataTypes">
+      <v-draggable class="option-wrap" :list="options.dataTypes">
         <div
           class="option"
           v-for="dataType in options.dataTypes"
@@ -220,16 +220,8 @@ $mdc-theme-primary: #1abc9c;
 @import '@material/theme/mixins';
 @import '@material/typography/mixins';
 
-.mdc-checkbox {
-  margin-left: 8px;
-}
-
-.mdc-switch {
-  margin-right: 12px;
-}
-
 body {
-  min-width: 600px;
+  margin: 0;
   @include mdc-typography-base;
   font-size: 100%;
   background-color: #ffffff;
@@ -239,7 +231,15 @@ body {
 #app {
   display: grid;
   grid-row-gap: 32px;
-  padding: 12px;
+  padding: 24px;
+}
+
+.mdc-checkbox {
+  margin-right: 4px;
+}
+
+.mdc-switch {
+  margin-right: 16px;
 }
 
 .section-title,
@@ -259,21 +259,39 @@ body {
 .option-wrap {
   display: grid;
   grid-row-gap: 24px;
-  padding-top: 16px;
+  padding-top: 24px;
   grid-auto-columns: min-content;
-
-  &.engines {
-    grid-row-gap: 12px;
-  }
 }
 
 .option {
   display: flex;
   align-items: center;
-  height: 36px;
+  height: 24px;
+
+  & .mdc-form-field {
+    max-width: calc(100vw - 48px);
+
+    & label {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
 }
 
 .option.select {
+  align-items: start;
   height: 56px;
+
+  & .mdc-select__anchor,
+  & .mdc-select__menu {
+    max-width: calc(100vw - 48px);
+  }
+
+  & .mdc-select__selected-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 </style>
