@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.1](https://github.com/dessant/clear-browsing-data/compare/v3.1.0...v3.1.1) (2019-12-19)
+
+
+### Bug Fixes
+
+* adjust options page layout ([4562e99](https://github.com/dessant/clear-browsing-data/commit/4562e997c8196030a844f3f742ce4a34b484693f))
+* flip button positions ([95b62ab](https://github.com/dessant/clear-browsing-data/commit/95b62ab26973eaf93acc392044a2bf884a63b53f))
+
 ## [3.1.0](https://github.com/dessant/clear-browsing-data/compare/v3.0.0...v3.1.0) (2019-12-11)
 
 
