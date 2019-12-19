@@ -6,16 +6,16 @@
       </div>
       <div class="header-buttons">
         <v-icon-button
-          class="contribute-button"
-          src="/src/contribute/assets/heart.svg"
-          @click="showContribute"
+          class="settings-button"
+          src="/src/icons/misc/time.svg"
+          @click="showActionSettings = !showActionSettings"
         >
         </v-icon-button>
 
         <v-icon-button
-          class="settings-button"
-          src="/src/icons/misc/time.svg"
-          @click="showActionSettings = !showActionSettings"
+          class="contribute-button"
+          src="/src/contribute/assets/heart.svg"
+          @click="showContribute"
         >
         </v-icon-button>
 
@@ -298,7 +298,7 @@ body {
   white-space: nowrap;
   padding-top: 16px;
   padding-left: 16px;
-  padding-right: 8px;
+  padding-right: 4px;
 }
 
 .title {
@@ -332,11 +332,11 @@ body {
 }
 
 .contribute-button {
-  margin-right: 8px;
+  margin-right: 4px;
 }
 
 .settings-button {
-  margin-right: 4px;
+  margin-right: 12px;
 }
 
 .action-menu {
