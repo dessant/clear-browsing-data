@@ -49,9 +49,8 @@ Supported data types:
 ## Screenshots
 
 <p>
-  <img width="280" src="https://i.imgur.com/5BXmcAQ.png">
-  <img width="280" src="https://i.imgur.com/to7D2DN.png">
-  <img width="280" src="https://i.imgur.com/pttwGOn.png">
+  <img width="420" src="https://i.imgur.com/agvQ7e3.png">
+  <img width="420" src="https://i.imgur.com/DB1vRFM.png">
 </p>
 
 ## License
