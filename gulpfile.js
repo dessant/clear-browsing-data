@@ -22,7 +22,7 @@ function clean() {
 }
 
 function js(done) {
-  exec('webpack-cli --display-error-details --bail --colors', function(
+  exec('webpack-cli --display-error-details --bail --colors', function (
     err,
     stdout,
     stderr
@@ -95,7 +95,7 @@ async function fonts(done) {
 
 async function locale(done) {
   const localesRootDir = path.join(__dirname, 'src/_locales');
-  const localeDirs = readdirSync(localesRootDir).filter(function(file) {
+  const localeDirs = readdirSync(localesRootDir).filter(function (file) {
     return lstatSync(path.join(localesRootDir, file)).isDirectory();
   });
   for (const localeDir of localeDirs) {
@@ -187,7 +187,7 @@ See the LICENSE file for further information.
 function zip(done) {
   exec(
     `web-ext build -s dist/${targetEnv} -a artifacts/${targetEnv} -n '{name}-{version}-${targetEnv}.zip' --overwrite-dest`,
-    function(err, stdout, stderr) {
+    function (err, stdout, stderr) {
       console.log(stdout);
       console.log(stderr);
       done(err);
@@ -198,7 +198,7 @@ function zip(done) {
 function inspect(done) {
   exec(
     `webpack --profile --json > report.json && webpack-bundle-analyzer report.json dist/firefox/src && sleep 10 && rm report.{json,html}`,
-    function(err, stdout, stderr) {
+    function (err, stdout, stderr) {
       console.log(stdout);
       console.log(stderr);
       done(err);

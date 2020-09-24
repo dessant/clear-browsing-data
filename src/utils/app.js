@@ -16,7 +16,7 @@ function getListItems(data, {scope = '', shortScope = ''} = {}) {
   const labels = {};
   for (const [group, items] of Object.entries(data)) {
     labels[group] = [];
-    items.forEach(function(value) {
+    items.forEach(function (value) {
       const item = {
         id: value,
         label: getText(`${scope ? scope + '_' : ''}${value}`)

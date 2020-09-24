@@ -71,7 +71,7 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
     if (!enDataTypes) {
       enDataTypes = await getEnabledDataTypes(options);
     }
-    enDataTypes.forEach(function(item) {
+    enDataTypes.forEach(function (item) {
       dataTypes[item] = true;
     });
   } else {

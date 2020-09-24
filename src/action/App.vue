@@ -113,7 +113,7 @@ export default {
     [ResizeObserver.name]: ResizeObserver
   },
 
-  data: function() {
+  data: function () {
     return {
       dataLoaded: false,
 
@@ -154,7 +154,7 @@ export default {
   },
 
   computed: {
-    listClasses: function() {
+    listClasses: function () {
       return {
         'list-items-max-height': this.isPopup
       };
@@ -164,7 +164,7 @@ export default {
   methods: {
     getText,
 
-    selectItem: function(item) {
+    selectItem: function (item) {
       browser.runtime.sendMessage({
         id: 'actionPopupSubmit',
         item
@@ -173,26 +173,26 @@ export default {
       this.closeAction();
     },
 
-    showContribute: async function() {
+    showContribute: async function () {
       await showContributePage();
       this.closeAction();
     },
 
-    showOptions: async function() {
+    showOptions: async function () {
       await browser.runtime.openOptionsPage();
       this.closeAction();
     },
 
-    showWebsite: async function() {
+    showWebsite: async function () {
       await showProjectPage();
       this.closeAction();
     },
 
-    showActionMenu: function() {
+    showActionMenu: function () {
       this.$refs.actionMenu.$emit('open');
     },
 
-    onActionMenuSelect: async function(item) {
+    onActionMenuSelect: async function (item) {
       if (item === 'options') {
         await this.showOptions();
       } else if (item === 'website') {
@@ -200,7 +200,7 @@ export default {
       }
     },
 
-    closeAction: async function() {
+    closeAction: async function () {
       if (!this.isPopup) {
         browser.tabs.remove((await browser.tabs.getCurrent()).id);
       } else {
@@ -208,12 +208,12 @@ export default {
       }
     },
 
-    handleSizeChange: function() {
+    handleSizeChange: function () {
       const items = this.$refs.items;
       this.hasScrollBar = items.scrollHeight > items.clientHeight;
     },
 
-    settingsAfterEnter: function() {
+    settingsAfterEnter: function () {
       this.handleSizeChange();
       this.$refs.clearSinceSelect.$el
         .querySelector('.mdc-select__selected-text')
@@ -221,7 +221,7 @@ export default {
     }
   },
 
-  created: async function() {
+  created: async function () {
     this.isPopup = !(await browser.tabs.getCurrent());
     if (!this.isPopup) {
       document.documentElement.style.height = '100%';
@@ -235,14 +235,14 @@ export default {
     this.clearAllDataTypes = options.clearAllDataTypesAction === 'sub';
     this.clearSince = options.clearSince;
 
-    this.$watch('clearSince', async function(value) {
+    this.$watch('clearSince', async function (value) {
       await storage.set({clearSince: value}, 'sync');
     });
 
     this.dataLoaded = true;
   },
 
-  mounted: function() {
+  mounted: function () {
     window.setTimeout(() => {
       for (const listEl of document.querySelectorAll(
         '.list-bulk-button, .list-items'
