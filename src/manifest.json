@@ -7,7 +7,7 @@
   "homepage_url": "https://github.com/dessant/clear-browsing-data",
   "default_locale": "en",
 
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
       "id": "{ce9f4b1f-24b8-4e9a-9051-b9e472b1b2f2}",
       "strict_min_version": "68.0"
