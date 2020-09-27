@@ -102,7 +102,7 @@ import {
   showContributePage,
   showProjectPage
 } from 'utils/app';
-import {getText} from 'utils/common';
+import {getText, isAndroid} from 'utils/common';
 import {optionKeys} from 'utils/data';
 
 export default {
@@ -146,6 +146,7 @@ export default {
       },
       hasScrollBar: false,
       isPopup: false,
+      tabId: null,
 
       dataTypes: [],
       clearAllDataTypes: false,
@@ -201,8 +202,8 @@ export default {
     },
 
     closeAction: async function () {
-      if (!this.isPopup) {
-        browser.tabs.remove((await browser.tabs.getCurrent()).id);
+      if (this.tabId) {
+        browser.tabs.remove(this.tabId);
       } else {
         window.close();
       }
@@ -222,7 +223,11 @@ export default {
   },
 
   created: async function () {
-    this.isPopup = !(await browser.tabs.getCurrent());
+    const currentTab = await browser.tabs.getCurrent();
+    if (currentTab) {
+      this.tabId = currentTab.id;
+    }
+    this.isPopup = !this.tabId && !(await isAndroid());
     if (!this.isPopup) {
       document.documentElement.style.height = '100%';
       document.body.style.minWidth = 'initial';
@@ -268,11 +273,6 @@ $mdc-theme-primary: #1abc9c;
 
 @import 'vue-resize/dist/vue-resize';
 
-html,
-body {
-  overflow: hidden;
-}
-
 body,
 #app {
   height: 100%;
@@ -286,6 +286,7 @@ body,
 body {
   margin: 0;
   min-width: 387px;
+  overflow: hidden;
   @include mdc-typography-base;
   font-size: 100%;
   background-color: #ffffff;

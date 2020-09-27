@@ -8,7 +8,7 @@ async function init() {
     await document.fonts.load('500 14px Roboto');
   } catch (err) {}
 
-  const vm = new Vue({
+  new Vue({
     el: '#app',
     render: h => h(App)
   });

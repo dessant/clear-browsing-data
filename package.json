@@ -25,6 +25,7 @@
     "build:prod:zip:all": "run-s 'build:prod:zip:@(chrome|edge|firefox|opera)'",
     "start:chrome": "web-ext run -s dist/chrome -t chromium",
     "start:firefox": "web-ext run -s dist/firefox -t firefox-desktop",
+    "start:android": "web-ext run -s dist/firefox -t firefox-android",
     "inspect": "cross-env NODE_ENV=production gulp inspect",
     "update": "ncu --upgrade",
     "push": "git push --follow-tags origin master",

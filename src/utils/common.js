@@ -33,4 +33,4 @@ async function isAndroid() {
   return os === 'android';
 }
 
-export {getText, createTab, getActiveTab};
+export {getText, createTab, getActiveTab, isAndroid};

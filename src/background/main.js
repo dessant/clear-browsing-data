@@ -2,7 +2,7 @@ import browser from 'webextension-polyfill';
 
 import {initStorage} from 'storage/init';
 import storage from 'storage/storage';
-import {getText, getActiveTab} from 'utils/common';
+import {getText, getActiveTab, isAndroid} from 'utils/common';
 import {
   getEnabledDataTypes,
   showNotification,
@@ -80,28 +80,33 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
 
   let tempTabId;
   const {id: activeTabId} = await getActiveTab();
+  const android = await isAndroid();
 
   if (options.closeTabs !== 'false') {
     if (['all', 'allButActive', 'exit'].includes(options.closeTabs)) {
-      const windows = await browser.windows.getAll({populate: true});
-      for (const window of windows) {
-        if (!window.focused) {
-          const tabIds = window.tabs.reduce((results, tab) => {
-            if (!tab.pinned || options.closePinnedTabs) {
-              results.push(tab.id);
-            }
-            return results;
-          }, []);
-          await browser.tabs.remove(tabIds);
+      const backgroundWindowTabs = await browser.tabs.query({
+        lastFocusedWindow: false
+      });
+      const tabIds = backgroundWindowTabs.reduce((results, tab) => {
+        if (
+          !tab.pinned ||
+          options.closePinnedTabs ||
+          options.closeTabs === 'exit'
+        ) {
+          results.push(tab.id);
         }
-      }
+        return results;
+      }, []);
+      await browser.tabs.remove(tabIds);
     }
 
-    const activeWindow = await browser.windows.getLastFocused({populate: true});
+    const focusedWindowTabs = await browser.tabs.query({
+      lastFocusedWindow: true
+    });
 
     let pinnedTabIds = [];
-    if (!options.closePinnedTabs) {
-      pinnedTabIds = activeWindow.tabs.reduce((results, tab) => {
+    if (!options.closePinnedTabs || options.closeTabs === 'exit') {
+      pinnedTabIds = focusedWindowTabs.reduce((results, tab) => {
         if (tab.pinned) {
           results.push(tab.id);
         }
@@ -110,10 +115,10 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
     }
 
     if (options.closeTabs === 'all') {
-      if (!pinnedTabIds.length) {
+      if (!pinnedTabIds.length && !android) {
         ({id: tempTabId} = await browser.tabs.create({active: false}));
       }
-      const tabIds = activeWindow.tabs.reduce((results, tab) => {
+      const tabIds = focusedWindowTabs.reduce((results, tab) => {
         if (!pinnedTabIds.includes(tab.id)) {
           results.push(tab.id);
         }
@@ -122,7 +127,7 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
 
       await browser.tabs.remove(tabIds);
     } else if (options.closeTabs === 'active') {
-      if (!pinnedTabIds.length && activeWindow.tabs.length === 1) {
+      if (!pinnedTabIds.length && focusedWindowTabs.length === 1 && !android) {
         ({id: tempTabId} = await browser.tabs.create({active: false}));
       }
 
@@ -130,7 +135,7 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
         await browser.tabs.remove(activeTabId);
       }
     } else if (options.closeTabs === 'allButActive') {
-      const tabIds = activeWindow.tabs.reduce((results, tab) => {
+      const tabIds = focusedWindowTabs.reduce((results, tab) => {
         if (!pinnedTabIds.includes(tab.id) && tab.id !== activeTabId) {
           results.push(tab.id);
         }
@@ -139,11 +144,14 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
 
       await browser.tabs.remove(tabIds);
     } else if (options.closeTabs === 'exit') {
-      ({id: tempTabId} = await browser.tabs.create({
-        url: 'about:blank',
-        active: false
-      }));
-      await browser.tabs.remove(activeWindow.tabs.map(tab => tab.id));
+      if (!android) {
+        ({id: tempTabId} = await browser.tabs.create({
+          url: 'about:blank',
+          active: false
+        }));
+      }
+
+      await browser.tabs.remove(focusedWindowTabs.map(tab => tab.id));
     }
   }
 
@@ -164,7 +172,9 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
   }
 
   if (options.closeTabs === 'exit') {
-    browser.tabs.remove(tempTabId);
+    if (tempTabId) {
+      browser.tabs.remove(tempTabId);
+    }
     return;
   }
 
