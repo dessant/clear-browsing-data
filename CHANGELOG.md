@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/dessant/clear-browsing-data/compare/v3.1.1...v3.2.0) (2020-09-28)
+
+
+### Features
+
+* add support for Android ([30b5e88](https://github.com/dessant/clear-browsing-data/commit/30b5e8802b90661386e1e7782df20e0c993736e0))
+* support Chrome Incognito ([4dcc944](https://github.com/dessant/clear-browsing-data/commit/4dcc944241765acadb0bd43caac80bc99e577f33))
+
+
+### Bug Fixes
+
+* increase favicon size ([7b8c254](https://github.com/dessant/clear-browsing-data/commit/7b8c254f4da0b3e9fa90bbb1b6ffc8cc91a3c2aa))
+
 ### [3.1.1](https://github.com/dessant/clear-browsing-data/compare/v3.1.0...v3.1.1) (2019-12-19)
 
 
