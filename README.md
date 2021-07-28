@@ -1,16 +1,16 @@
-<p align="center"><img src="https://i.imgur.com/jgDepMY.png"></p>
+<p align="center"><img width="128" height="128" src="https://i.imgur.com/913EKe3.png"></p>
 <h1 align="center">Clear Browsing Data</h1>
 
 <p align="center">
   </br></br>
   <a href="https://chrome.google.com/webstore/detail/bjilljlpencdcpihofiobpnfgcakfdbe">
-    <img src="https://i.imgur.com/B0i5sn3.png" alt="Chrome Web Store"></a>
+    <img height="58" src="https://i.imgur.com/K9Yh8G9.png" alt="Chrome Web Store"></a>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/clear-browsing-data/">
-    <img src="https://i.imgur.com/kMH6r1a.png" alt="Firefox add-ons"></a>
+    <img height="58" src="https://i.imgur.com/2jJOtTI.png" alt="Firefox add-ons"></a>
   <a href="https://microsoftedge.microsoft.com/addons/detail/milebhdgmnpkhodhblfmgeeadncpnimi">
-    <img src="https://i.imgur.com/n49Wiu2.png" alt="Microsoft Store"></a>
+    <img height="58" src="https://i.imgur.com/es2YFRA.png" alt="Microsoft Store"></a>
   <a href="https://addons.opera.com/en/extensions/details/clear-browsing-data/">
-    <img src="https://i.imgur.com/wK10qEV.png" alt="Opera add-ons"></a>
+    <img height="58" src="https://i.imgur.com/IYYsrwg.png" alt="Opera add-ons"></a>
   </br></br>
 </p>
 
@@ -33,20 +33,20 @@ and the extension also supports closing and reloading tabs.
 
 Supported data types:
 
-* Cookies
-* Browsing history
-* Cached images and files
-* Cache storage data
-* Autofill form data
-* Download history
-* Service Workers
-* IndexedDB data
-* Local storage data
-* Website file systems
-* Plugin data
-* Web SQL data
-* Saved passwords
-* Application Cache
+- Cookies
+- Browsing history
+- Cached images and files
+- Cache storage data
+- Autofill form data
+- Download history
+- Service Workers
+- IndexedDB data
+- Local storage data
+- Website file systems
+- Plugin data
+- Web SQL data
+- Saved passwords
+- Application Cache
 
 ## Screenshots
 
@@ -57,7 +57,7 @@ Supported data types:
 
 ## License
 
-Copyright (c) 2017-2020 Armin Sebastian
+Copyright (c) 2017-2021 Armin Sebastian
 
 This software is released under the terms of the GNU General Public License v3.0.
 See the [LICENSE](LICENSE) file for further information.
