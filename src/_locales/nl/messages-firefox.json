@@ -1,0 +1,26 @@
+{
+  "menuItemTitle_formData": {
+    "message": "Formuliergeschiedenis",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_localStorage": {
+    "message": "Lokale opslag",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_pluginData": {
+    "message": "Plug-incache",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_allDataTypes": {
+    "message": "Alle gegevens",
+    "description": "Title of the menu item."
+  },
+
+  "optionSectionTitle_dataTypes": {
+    "message": "Gegevenssoorten",
+    "description": "Title of the option section."
+  }
+}

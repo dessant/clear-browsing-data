@@ -1,0 +1,456 @@
+{
+  "extensionName": {
+    "message": "Browseropruiming",
+    "description": "Name of the extension."
+  },
+
+  "extensionDescription": {
+    "message": "Wis browsergegevens vanaf de werkbalk met één muisklik: cookies, geschiedenis en caches.",
+    "description": "Description of the extension."
+  },
+
+  "actionTitle_appcache": {
+    "message": "Programmacache wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_cache": {
+    "message": "Cache wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_cacheStorage": {
+    "message": "Cache-opslag wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_cookies": {
+    "message": "Cookies wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_downloads": {
+    "message": "Downloadgeschiedenis wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_fileSystems": {
+    "message": "Website-bestandssystemen wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_formData": {
+    "message": "Formuliergeschiedenis wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_history": {
+    "message": "Navigatiegeschiedenis wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_indexedDB": {
+    "message": "IndexedDB-gegevens wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_localStorage": {
+    "message": "Lokale opslag wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_passwords": {
+    "message": "Opgeslagen wachtwoorden wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_pluginData": {
+    "message": "Plug-incache wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_serviceWorkers": {
+    "message": "Dienstwerkers wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_webSQL": {
+    "message": "Web SQL-gegevens wissen",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_allDataTypes": {
+    "message": "Alle browsergegevens wissen",
+    "description": "Title of the action."
+  },
+
+  "menuItemTitle_appcache": {
+    "message": "Programmacache",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_cache": {
+    "message": "Cache",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_cacheStorage": {
+    "message": "Cache-opslag",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_cookies": {
+    "message": "Cookies",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_downloads": {
+    "message": "Downloads",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_fileSystems": {
+    "message": "Bestandssystemen",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_formData": {
+    "message": "Formuliergeschiedenis",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_history": {
+    "message": "Geschiedenis",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_indexedDB": {
+    "message": "IndexedDB",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_localStorage": {
+    "message": "Lokale opslag",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_passwords": {
+    "message": "Wachtwoorden",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_pluginData": {
+    "message": "Plug-incache",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_serviceWorkers": {
+    "message": "Dienstwerkers",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_webSQL": {
+    "message": "Web SQL",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_allDataTypes": {
+    "message": "Alle browsergegevens wissen",
+    "description": "Title of the menu item."
+  },
+
+  "optionSectionTitle_dataTypes": {
+    "message": "Gegevenssoorten",
+    "description": "Title of the option section."
+  },
+
+  "optionSectionDescription_dataTypes": {
+    "message": "Kies gegevenssoorten en pas de volgorde aan middels slepen-en-neerzetten.",
+    "description": "Description of the option section."
+  },
+
+  "optionTitle_appcache": {
+    "message": "Programmacache",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_cache": {
+    "message": "Gecachete afbeeldingen en bestanden",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_cacheStorage": {
+    "message": "Cache-opslag",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_cookies": {
+    "message": "Cookies",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_downloads": {
+    "message": "Downloadgeschiedenis",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_fileSystems": {
+    "message": "Website-bestandssystemen",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_formData": {
+    "message": "Automatisch aangevulde formuliergegevens",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_history": {
+    "message": "Navigatiegeschiedenis",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_indexedDB": {
+    "message": "IndexedDB-gegevens",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_localStorage": {
+    "message": "Lokaal opslagen gegevens",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_passwords": {
+    "message": "Opgeslagen wachtwoorden",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_pluginData": {
+    "message": "Plug-incache",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_serviceWorkers": {
+    "message": "Dienstwerkers",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_webSQL": {
+    "message": "Web SQL-gegevens",
+    "description": "Title of the option."
+  },
+
+  "optionSectionTitle_tabs": {
+    "message": "Tabbladen",
+    "description": "Title of the option section."
+  },
+
+  "optionTitle_closeTabs": {
+    "message": "Tabbladen sluiten",
+    "description": "Title of the option."
+  },
+
+  "optionValue_closeTabs_all": {
+    "message": "Alle tabbladen",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_active": {
+    "message": "Actief tabblad",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_allButActive": {
+    "message": "Alle tabbladen behalve het actieve",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_exit": {
+    "message": "Alle tabbladen en afsluiten",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_false": {
+    "message": "Uitschakelen",
+    "description": "Value of the option."
+  },
+
+  "optionTitle_closePinnedTabs": {
+    "message": "Vastgemaakte tabbladen sluiten",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_reloadTabs": {
+    "message": "Tabbladen herladen",
+    "description": "Title of the option."
+  },
+
+  "optionValue_reloadTabs_all": {
+    "message": "Alle tabbladen",
+    "description": "Value of the option."
+  },
+
+  "optionValue_reloadTabs_active": {
+    "message": "Actief tabblad",
+    "description": "Value of the option."
+  },
+
+  "optionValue_reloadTabs_allButActive": {
+    "message": "Alle tabbladen behalve het actieve",
+    "description": "Value of the option."
+  },
+
+  "optionValue_reloadTabs_false": {
+    "message": "Uitschakelen",
+    "description": "Value of the option."
+  },
+
+  "optionSectionTitle_misc": {
+    "message": "Overig",
+    "description": "Title of the option section."
+  },
+
+  "optionTitle_clearAllDataTypes": {
+    "message": "Alle browsergegevens wissen",
+    "description": "Title of the option."
+  },
+
+  "optionValue_clearAllDataTypesAction_main": {
+    "message": "Vanaf de werkbalk",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearAllDataTypesAction_sub": {
+    "message": "Vanuit een werkbalkpop-up",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearAllDataTypesAction_false": {
+    "message": "Uitschakelen",
+    "description": "Value of the option."
+  },
+
+  "optionTitle_clearSince": {
+    "message": "Tijdspanne",
+    "description": "Title of the option."
+  },
+
+  "optionValue_clearSince_1minute": {
+    "message": "Afgelopen minuut",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_3minutes": {
+    "message": "Afgelopen 3 minuten",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_10minutes": {
+    "message": "Afgelopen 10 minuten",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_30minutes": {
+    "message": "Afgelopen 30 minuten",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_1hour": {
+    "message": "Afgelopen uur",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_3hours": {
+    "message": "Afgelopen 3 uur",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_1day": {
+    "message": "Gisteren",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_1week": {
+    "message": "Vorige week",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_4weeks": {
+    "message": "Afgelopen 4 weken",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_90days": {
+    "message": "Afgelopen 90 dagen",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_365days": {
+    "message": "Afgelopen jaar",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_epoch": {
+    "message": "Alles",
+    "description": "Value of the option."
+  },
+
+  "optionTitle_notifyOnSuccess": {
+    "message": "Melding tonen als het wissen voltooid is",
+    "description": "Title of the option."
+  },
+
+  "pageTitle": {
+    "message": "$PAGETITLE$ - $EXTENSIONNAME$",
+    "description": "Title of the page.",
+    "placeholders": {
+      "pageTitle": {
+        "content": "$1",
+        "example": "Options"
+      },
+      "extensionName": {
+        "content": "$2",
+        "example": "Extension Name"
+      }
+    }
+  },
+
+  "pageTitle_options": {
+    "message": "Instellingen",
+    "description": "Title of the page."
+  },
+
+  "pageTitle_contribute": {
+    "message": "Bijdragen",
+    "description": "Title of the page."
+  },
+
+  "actionMenu_options": {
+    "message": "Instellingen",
+    "description": "Title of the menu item."
+  },
+
+  "actionMenu_website": {
+    "message": "Website",
+    "description": "Title of the menu item."
+  },
+
+  "info_dataTypeCleared": {
+    "message": "De gekozen browsergegevens zijn gewist.",
+    "description": "Info message."
+  },
+
+  "error_allDataTypesDisabled": {
+    "message": "Open de instellingen en kies één of meer te wissen gegevens.",
+    "description": "Error message."
+  },
+
+  "error_dataTypeNotCleared": {
+    "message": "Er is iets misgegaan waardoor de browsergegevens niet zijn gewist.",
+    "description": "Error message."
+  },
+
+  "error_internalError": {
+    "message": "Er is iets misgegaan. Open voor meer informatie de browserconsole.",
+    "description": "Error message."
+  }
+}
