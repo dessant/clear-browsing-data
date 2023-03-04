@@ -6,9 +6,42 @@ const optionKeys = [
   'closeTabs',
   'closePinnedTabs',
   'reloadTabs',
-  'notifyOnSuccess'
+  'notifyOnSuccess',
+  'showDataTypeIcons',
+  'confirmDataRemoval',
+  'appTheme',
+  'showContribPage',
+  'pinActionToolbarOptions',
+  'pinActionToolbarContribute'
 ];
 
-const projectUrl = 'https://github.com/dessant/clear-browsing-data';
+const dataTypeIconAlias = {};
 
-export {optionKeys, projectUrl};
+const dataTypeIconVariants = {
+  appcache: ['dark'],
+  cookies: ['dark'],
+  history: ['dark'],
+  cache: ['dark'],
+  cacheStorage: ['dark'],
+  fileSystems: ['dark'],
+  formData: ['dark'],
+  downloads: ['dark'],
+  serviceWorkers: ['dark'],
+  webSQL: ['dark'],
+  pluginData: ['dark'],
+  passwords: ['dark'],
+  localStorage: ['dark'],
+  indexedDB: ['dark']
+};
+
+const rasterDataTypeIcons = [];
+
+const supportUrl = 'https://github.com/dessant/clear-browsing-data/issues';
+
+export {
+  optionKeys,
+  dataTypeIconAlias,
+  dataTypeIconVariants,
+  rasterDataTypeIcons,
+  supportUrl
+};

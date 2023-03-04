@@ -1,0 +1,561 @@
+{
+  "extensionName": {
+    "message": "Clear Browsing Data",
+    "description": "Name of the extension."
+  },
+
+  "extensionDescription": {
+    "message": "Delete browsing data directly from the browser toolbar. Clear cookies, history and cache with a single click.",
+    "description": "Description of the extension."
+  },
+
+  "actionTitle_appcache": {
+    "message": "Clear Application Cache",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_cache": {
+    "message": "Clear cache",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_cacheStorage": {
+    "message": "Clear cache storage",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_cookies": {
+    "message": "Clear cookies",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_downloads": {
+    "message": "Clear download history",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_fileSystems": {
+    "message": "Clear website file systems",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_formData": {
+    "message": "Clear form data",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_history": {
+    "message": "Clear browsing history",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_indexedDB": {
+    "message": "Clear IndexedDB data",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_localStorage": {
+    "message": "Clear local storage data",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_passwords": {
+    "message": "Clear saved passwords",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_pluginData": {
+    "message": "Clear plugin data",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_serviceWorkers": {
+    "message": "Clear Service Workers",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_webSQL": {
+    "message": "Clear Web SQL data",
+    "description": "Title of the action."
+  },
+
+  "actionTitle_allDataTypes": {
+    "message": "Clear all browsing data",
+    "description": "Title of the action."
+  },
+
+  "menuItemTitle_appcache": {
+    "message": "Application Cache",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_cache": {
+    "message": "Cache",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_cacheStorage": {
+    "message": "Cache storage",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_cookies": {
+    "message": "Cookies",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_downloads": {
+    "message": "Downloads",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_fileSystems": {
+    "message": "File systems",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_formData": {
+    "message": "Form data",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_history": {
+    "message": "History",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_indexedDB": {
+    "message": "IndexedDB",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_localStorage": {
+    "message": "Local storage",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_passwords": {
+    "message": "Passwords",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_pluginData": {
+    "message": "Plugin data",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_serviceWorkers": {
+    "message": "Service Workers",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_webSQL": {
+    "message": "Web SQL",
+    "description": "Title of the menu item."
+  },
+
+  "menuItemTitle_allDataTypes": {
+    "message": "All data types",
+    "description": "Title of the menu item."
+  },
+
+  "optionSectionTitle_dataTypes": {
+    "message": "Data types",
+    "description": "Title of the option section."
+  },
+
+  "optionSectionDescription_dataTypes": {
+    "message": "Toggle data types and customize their order (drag and drop)",
+    "description": "Description of the option section."
+  },
+
+  "optionTitle_appcache": {
+    "message": "Application Cache",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_cache": {
+    "message": "Cached images and files",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_cacheStorage": {
+    "message": "Cache storage data",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_cookies": {
+    "message": "Cookies",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_downloads": {
+    "message": "Download history",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_fileSystems": {
+    "message": "Website file systems",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_formData": {
+    "message": "Autofill form data",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_history": {
+    "message": "Browsing history",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_indexedDB": {
+    "message": "IndexedDB data",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_localStorage": {
+    "message": "Local storage data",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_passwords": {
+    "message": "Saved passwords",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_pluginData": {
+    "message": "Plugin data",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_serviceWorkers": {
+    "message": "Service Workers",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_webSQL": {
+    "message": "Web SQL data",
+    "description": "Title of the option."
+  },
+
+  "optionSectionTitle_tabs": {
+    "message": "Tabs",
+    "description": "Title of the option section."
+  },
+
+  "optionTitle_closeTabs": {
+    "message": "Close tabs",
+    "description": "Title of the option."
+  },
+
+  "optionValue_closeTabs_all": {
+    "message": "All tabs",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_active": {
+    "message": "Active tab",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_allButActive": {
+    "message": "All tabs except active",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_exit": {
+    "message": "All tabs and exit",
+    "description": "Value of the option."
+  },
+
+  "optionValue_closeTabs_false": {
+    "message": "Disable",
+    "description": "Value of the option."
+  },
+
+  "optionTitle_closePinnedTabs": {
+    "message": "Close pinned tabs",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_reloadTabs": {
+    "message": "Reload tabs",
+    "description": "Title of the option."
+  },
+
+  "optionValue_reloadTabs_all": {
+    "message": "All tabs",
+    "description": "Value of the option."
+  },
+
+  "optionValue_reloadTabs_active": {
+    "message": "Active tab",
+    "description": "Value of the option."
+  },
+
+  "optionValue_reloadTabs_allButActive": {
+    "message": "All tabs except active",
+    "description": "Value of the option."
+  },
+
+  "optionValue_reloadTabs_false": {
+    "message": "Disable",
+    "description": "Value of the option."
+  },
+
+  "optionSectionTitle_misc": {
+    "message": "Miscellaneous",
+    "description": "Title of the option section."
+  },
+
+  "optionTitle_clearAllDataTypes": {
+    "message": "Clear all data types",
+    "description": "Title of the option."
+  },
+
+  "optionValue_clearAllDataTypesAction_main": {
+    "message": "From browser toolbar",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearAllDataTypesAction_sub": {
+    "message": "From browser toolbar popup",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearAllDataTypesAction_false": {
+    "message": "Disable",
+    "description": "Value of the option."
+  },
+
+  "optionTitle_clearSince": {
+    "message": "Time range",
+    "description": "Title of the option."
+  },
+
+  "optionValue_clearSince_1minute": {
+    "message": "Last minute",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_3minutes": {
+    "message": "Last 3 minutes",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_10minutes": {
+    "message": "Last 10 minutes",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_30minutes": {
+    "message": "Last 30 minutes",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_1hour": {
+    "message": "Last hour",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_3hours": {
+    "message": "Last 3 hours",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_1day": {
+    "message": "Last day",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_1week": {
+    "message": "Last week",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_4weeks": {
+    "message": "Last 4 weeks",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_90days": {
+    "message": "Last 90 days",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_365days": {
+    "message": "Last 365 days",
+    "description": "Value of the option."
+  },
+
+  "optionValue_clearSince_epoch": {
+    "message": "All time",
+    "description": "Value of the option."
+  },
+
+  "optionTitle_notifyOnSuccess": {
+    "message": "Show notification on success",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_showDataTypeIcons": {
+    "message": "Show data type icons",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_confirmDataRemoval": {
+    "message": "Ask before removing data",
+    "description": "Title of the option."
+  },
+
+  "optionTitle_appTheme": {
+    "message": "Theme",
+    "description": "Title of the option."
+  },
+
+  "optionValue_appTheme_auto": {
+    "message": "System default",
+    "description": "Value of the option."
+  },
+
+  "optionValue_appTheme_light": {
+    "message": "Light",
+    "description": "Value of the option."
+  },
+
+  "optionValue_appTheme_dark": {
+    "message": "Dark",
+    "description": "Value of the option."
+  },
+
+  "optionTitle_showContribPage": {
+    "message": "Show contribution page",
+    "description": "Title of the option."
+  },
+
+  "buttonLabel_contribute": {
+    "message": "Contribute",
+    "description": "Label of the button."
+  },
+
+  "buttonLabel_cancel": {
+    "message": "Cancel",
+    "description": "Label of the button."
+  },
+
+  "buttonLabel_clearData": {
+    "message": "Clear data",
+    "description": "Label of the button."
+  },
+
+  "dialogTitle_clearConfirmation": {
+    "message": "Clear browsing data?",
+    "description": "Title of the dialog."
+  },
+
+  "dialogText_clearConfirmation": {
+    "message": "The selected browsing data will be permanently deleted.",
+    "description": "Title of the dialog."
+  },
+
+  "checkboxLabel_noConfirmation": {
+    "message": "Don't ask again",
+    "description": "Label of the checkbox."
+  },
+
+  "pageTitle": {
+    "message": "$PAGETITLE$ - $EXTENSIONNAME$",
+    "description": "Title of the page.",
+    "placeholders": {
+      "pageTitle": {
+        "content": "$1",
+        "example": "Options"
+      },
+      "extensionName": {
+        "content": "$2",
+        "example": "Extension Name"
+      }
+    }
+  },
+
+  "pageTitle_options": {
+    "message": "Options",
+    "description": "Title of the page."
+  },
+
+  "pageTitle_contribute": {
+    "message": "Contribute",
+    "description": "Title of the page."
+  },
+
+  "actionMenu_options": {
+    "message": "Options",
+    "description": "Title of the menu item."
+  },
+
+  "actionMenu_contribute": {
+    "message": "Contribute",
+    "description": "Title of the menu item."
+  },
+
+  "actionMenu_support": {
+    "message": "Support",
+    "description": "Title of the menu item."
+  },
+
+  "buttonTooltip_clearSince": {
+    "message": "Time range",
+    "description": "Tooltip of the button."
+  },
+
+  "buttonTooltip_contribute": {
+    "message": "Contribute",
+    "description": "Tooltip of the button."
+  },
+
+  "buttonTooltip_options": {
+    "message": "Options",
+    "description": "Tooltip of the button."
+  },
+
+  "buttonTooltip_menu": {
+    "message": "Menu",
+    "description": "Tooltip of the button."
+  },
+
+  "buttonTooltip_pin": {
+    "message": "Pin",
+    "description": "Tooltip of the button."
+  },
+
+  "buttonTooltip_unpin": {
+    "message": "Unpin",
+    "description": "Tooltip of the button."
+  },
+
+  "info_dataTypeCleared": {
+    "message": "The selected browsing data has been successfully cleared.",
+    "description": "Info message."
+  },
+
+  "error_allDataTypesDisabled": {
+    "message": "All data types have been disabled. Visit the options page and enable at least one data type.",
+    "description": "Error message."
+  },
+
+  "error_dataTypeNotCleared": {
+    "message": "Something went wrong. The selected browsing data has not been cleared.",
+    "description": "Error message."
+  },
+
+  "error_optionsNotApplied": {
+    "message": "Restart the browser for changes to take effect.",
+    "description": "Error message."
+  },
+
+  "error_internalError": {
+    "message": "Something went wrong. Open the browser console for more details.",
+    "description": "Error message."
+  }
+}

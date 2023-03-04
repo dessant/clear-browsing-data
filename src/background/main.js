@@ -1,27 +1,27 @@
-import browser from 'webextension-polyfill';
+import Queue from 'p-queue';
 
-import {initStorage} from 'storage/init';
+import {initStorage, migrateLegacyStorage} from 'storage/init';
+import {isStorageReady} from 'storage/storage';
 import storage from 'storage/storage';
-import {getText, getActiveTab, isAndroid} from 'utils/common';
+import {getText, getActiveTab, getPlatform, isAndroid} from 'utils/common';
 import {
   getEnabledDataTypes,
   showNotification,
-  showContributePage
+  showPage,
+  processAppUse,
+  processMessageResponse
 } from 'utils/app';
 import {optionKeys} from 'utils/data';
 import {targetEnv} from 'utils/config';
 
+const queue = new Queue({concurrency: 1});
+
 async function clearDataType(dataType, options = null, enDataTypes = null) {
   if (!options) {
-    options = await storage.get(optionKeys, 'sync');
+    options = await storage.get(optionKeys);
   }
 
-  let {useCount} = await storage.get('useCount', 'sync');
-  useCount += 1;
-  await storage.set({useCount}, 'sync');
-  if ([10, 50].includes(useCount) && options.closeTabs !== 'exit') {
-    await showContributePage('clear');
-  }
+  await processAppUse({showContribPage: options.closeTabs !== 'exit'});
 
   let since;
   if (options.clearSince === 'epoch') {
@@ -216,8 +216,8 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
   }
 }
 
-async function onActionClick() {
-  const options = await storage.get(optionKeys, 'sync');
+async function onActionButtonClick() {
+  const options = await storage.get(optionKeys);
   const enDataTypes = await getEnabledDataTypes(options);
 
   if (enDataTypes.length === 0) {
@@ -242,75 +242,109 @@ async function onActionPopupClick(dataType) {
   await clearDataType(dataType);
 }
 
-function onMessage(request, sender, sendResponse) {
+async function processMessage(request, sender) {
+  // Samsung Internet 13: extension messages are sometimes also dispatched
+  // to the sender frame.
+  if (sender.url === document.URL) {
+    return;
+  }
+
+  if (targetEnv === 'samsung') {
+    if (
+      /^internet-extension:\/\/.*\/src\/action\/index.html/.test(
+        sender.tab?.url
+      )
+    ) {
+      // Samsung Internet 18: runtime.onMessage provides sender.tab
+      // when the message is sent from the browser action,
+      // and tab.id refers to a nonexistent tab.
+      sender.tab = null;
+    }
+
+    if (sender.tab && sender.tab.id !== browser.tabs.TAB_ID_NONE) {
+      // Samsung Internet 13: runtime.onMessage provides wrong tab index.
+      sender.tab = await browser.tabs.get(sender.tab.id);
+    }
+  }
+
   if (request.id === 'actionPopupSubmit') {
     onActionPopupClick(request.item);
+  } else if (request.id === 'getPlatform') {
+    return getPlatform({fallback: false});
+  } else if (request.id === 'optionChange') {
+    await onOptionChange();
+  } else if (request.id === 'showPage') {
+    await showPage({url: request.url});
   }
 }
 
-async function onStorageChange(changes, area) {
-  await setBrowserAction();
+function onMessage(request, sender, sendResponse) {
+  const response = processMessage(request, sender);
+
+  return processMessageResponse(response, sendResponse);
+}
+
+async function onOptionChange() {
+  await setupUI();
 }
 
 async function setBrowserAction() {
-  const options = await storage.get(
-    ['dataTypes', 'disabledDataTypes', 'clearAllDataTypesAction'],
-    'sync'
-  );
+  const options = await storage.get([
+    'dataTypes',
+    'disabledDataTypes',
+    'clearAllDataTypesAction'
+  ]);
   const enDataTypes = await getEnabledDataTypes(options);
-  const hasListener = browser.browserAction.onClicked.hasListener(
-    onActionClick
-  );
 
   if (enDataTypes.length === 1) {
-    if (!hasListener) {
-      browser.browserAction.onClicked.addListener(onActionClick);
-    }
     browser.browserAction.setTitle({
       title: getText(`actionTitle_${enDataTypes[0]}`)
     });
     browser.browserAction.setPopup({popup: ''});
-    return;
-  }
-
-  if (options.clearAllDataTypesAction === 'main' && enDataTypes.length > 1) {
-    if (!hasListener) {
-      browser.browserAction.onClicked.addListener(onActionClick);
-    }
+  } else if (
+    options.clearAllDataTypesAction === 'main' &&
+    enDataTypes.length > 1
+  ) {
     browser.browserAction.setTitle({
       title: getText('actionTitle_allDataTypes')
     });
     browser.browserAction.setPopup({popup: ''});
-    return;
-  }
-
-  browser.browserAction.setTitle({title: getText('extensionName')});
-  if (enDataTypes.length === 0) {
-    if (!hasListener) {
-      browser.browserAction.onClicked.addListener(onActionClick);
-    }
-    browser.browserAction.setPopup({popup: ''});
   } else {
-    if (hasListener) {
-      browser.browserAction.onClicked.removeListener(onActionClick);
+    browser.browserAction.setTitle({title: getText('extensionName')});
+    if (enDataTypes.length === 0) {
+      browser.browserAction.setPopup({popup: ''});
+    } else {
+      browser.browserAction.setPopup({popup: '/src/action/index.html'});
     }
-    browser.browserAction.setPopup({popup: '/src/action/index.html'});
   }
 }
 
-function addStorageListener() {
-  browser.storage.onChanged.addListener(onStorageChange);
+function addBrowserActionListener() {
+  browser.browserAction.onClicked.addListener(onActionButtonClick);
 }
 
 function addMessageListener() {
   browser.runtime.onMessage.addListener(onMessage);
 }
 
-async function onLoad() {
-  await initStorage('sync');
-  await setBrowserAction();
-  addStorageListener();
-  addMessageListener();
+async function setupUI() {
+  await queue.add(setBrowserAction);
 }
 
-document.addEventListener('DOMContentLoaded', onLoad);
+async function setup() {
+  if (!(await isStorageReady())) {
+    await migrateLegacyStorage();
+    await initStorage();
+  }
+
+  await setupUI();
+}
+
+function init() {
+  addBrowserActionListener();
+  addMessageListener();
+
+  setup();
+}
+
+init();

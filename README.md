@@ -1,13 +1,13 @@
-<p align="center"><img width="128" height="128" src="https://i.imgur.com/913EKe3.png"></p>
+<p align="center"><img width="128" height="128" src="https://i.imgur.com/Kp8wCB4.png"></p>
 <h1 align="center">Clear Browsing Data</h1>
 
 <p align="center">
   </br></br>
-  <a href="https://chrome.google.com/webstore/detail/bjilljlpencdcpihofiobpnfgcakfdbe">
+  <a href="https://chrome.google.com/webstore/detail/clear-browsing-data/bjilljlpencdcpihofiobpnfgcakfdbe">
     <img height="58" src="https://i.imgur.com/K9Yh8G9.png" alt="Chrome Web Store"></a>
   <a href="https://addons.mozilla.org/en-US/firefox/addon/clear-browsing-data/">
     <img height="58" src="https://i.imgur.com/2jJOtTI.png" alt="Firefox add-ons"></a>
-  <a href="https://microsoftedge.microsoft.com/addons/detail/milebhdgmnpkhodhblfmgeeadncpnimi">
+  <a href="https://microsoftedge.microsoft.com/addons/detail/clear-browsing-data/milebhdgmnpkhodhblfmgeeadncpnimi">
     <img height="58" src="https://i.imgur.com/es2YFRA.png" alt="Microsoft Store"></a>
   <a href="https://addons.opera.com/en/extensions/details/clear-browsing-data/">
     <img height="58" src="https://i.imgur.com/IYYsrwg.png" alt="Opera add-ons"></a>
@@ -51,13 +51,13 @@ Supported data types:
 ## Screenshots
 
 <p>
-  <img width="414" src="https://i.imgur.com/agvQ7e3.png">
-  <img width="414" src="https://i.imgur.com/DB1vRFM.png">
+  <img width="380" src="https://i.imgur.com/agvQ7e3.png">
+  <img width="380" src="https://i.imgur.com/DB1vRFM.png">
 </p>
 
 ## License
 
-Copyright (c) 2017-2021 Armin Sebastian
+Copyright (c) 2017-2023 Armin Sebastian
 
 This software is released under the terms of the GNU General Public License v3.0.
 See the [LICENSE](LICENSE) file for further information.

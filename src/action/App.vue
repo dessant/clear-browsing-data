@@ -1,115 +1,234 @@
 <template>
-  <div id="app" v-show="dataLoaded">
+  <vn-app v-show="dataLoaded">
     <div class="header">
-      <div class="title">
-        {{ getText('extensionName') }}
-      </div>
-      <div class="header-buttons">
-        <v-icon-button
-          class="settings-button"
-          src="/src/icons/misc/time.svg"
-          @click="showActionSettings = !showActionSettings"
+      <div class="header-content">
+        <vn-select
+          ref="clearSinceButton"
+          class="clear-since-menu"
+          v-model="clearSince"
+          :menu-props="{
+            contentClass: 'v-select__content clear-since-menu__content'
+          }"
+          :items="listItems.clearSince"
+          :title="getText('buttonTooltip_clearSince')"
+          transition="scale-transition"
+          density="compact"
+          v-ripple
         >
-        </v-icon-button>
+        </vn-select>
+      </div>
 
-        <v-icon-button
+      <div class="header-content">
+        <vn-icon-button
+          v-if="enableContributions && pinActionToolbarContribute"
           class="contribute-button"
-          src="/src/contribute/assets/heart.svg"
+          src="/src/assets/icons/misc/favorite-filled.svg"
+          :title="getText('buttonTooltip_contribute')"
           @click="showContribute"
-        >
-        </v-icon-button>
+        ></vn-icon-button>
 
-        <v-icon-button
+        <vn-icon-button
+          v-if="pinActionToolbarOptions"
+          class="options-button"
+          src="/src/assets/icons/misc/settings.svg"
+          :title="getText('buttonTooltip_options')"
+          @click="showOptions"
+        ></vn-icon-button>
+
+        <vn-menu-icon-button
+          id="menu-button"
           class="menu-button"
-          src="/src/icons/misc/more.svg"
-          @click="showActionMenu"
+          src="/src/assets/icons/misc/more-vert.svg"
+          :title="getText('buttonTooltip_menu')"
+          menu-ref="actionMenu"
+          menu-list-ref="actionMenuList"
         >
-        </v-icon-button>
+        </vn-menu-icon-button>
       </div>
 
-      <v-menu
+      <vn-menu
         ref="actionMenu"
-        class="action-menu"
-        :ripple="true"
-        :items="listItems.actionMenu"
-        @selected="onActionMenuSelect"
-      ></v-menu>
+        activator="#menu-button"
+        content-class="action-menu__content"
+        :close-on-content-click="false"
+        transition="scale-transition"
+        v-model="openActionMenu"
+      >
+        <vn-list ref="actionMenuList">
+          <template
+            v-for="(item, index) of listItems.actionMenu"
+            :key="item.value"
+          >
+            <vn-list-item
+              v-if="item.isVisible || this[item.isVisibleStateProp]"
+              :title="item.title"
+              @click="onActionMenuSelect(item.value)"
+            >
+              <template v-slot:prepend>
+                <vn-icon
+                  :src="`/src/assets/icons/misc/${item.icon}.svg`"
+                ></vn-icon>
+              </template>
+
+              <template v-slot:append v-if="item.isPinnedStateProp">
+                <vn-icon-button
+                  src="/src/assets/icons/misc/push-pin-light.svg"
+                  src-on="/src/assets/icons/misc/push-pin-filled-light.svg"
+                  :title="getText('buttonTooltip_pin')"
+                  :title-on="getText('buttonTooltip_unpin')"
+                  :on="this[item.isPinnedStateProp]"
+                  @update:on="updatePinnedButtonState(item, $event)"
+                  @click.stop
+                  @keydown.enter.stop
+                  @keydown.space.stop
+                ></vn-icon-button>
+              </template>
+            </vn-list-item>
+          </template>
+        </vn-list>
+      </vn-menu>
     </div>
 
     <transition
       name="settings"
+      v-if="dataLoaded"
+      @before-enter="settingsBeforeEnter"
+      @before-leave="settingsBeforeLeave"
       @after-enter="settingsAfterEnter"
-      @after-leave="handleSizeChange"
+      @after-leave="settingsAfterLeave"
     >
-      <div class="settings" v-if="showActionSettings">
-        <v-select
-          ref="clearSinceSelect"
-          :label="getText('optionTitle_clearSince')"
-          v-model="clearSince"
-          :options="listItems.clearSince"
-        >
-        </v-select>
-      </div>
+      <div class="settings" v-if="showSettings"></div>
     </transition>
 
-    <div class="list-padding-top"></div>
-    <ul class="mdc-list list list-bulk-button" v-if="clearAllDataTypes">
-      <li class="mdc-list-item list-item" @click="selectItem('allDataTypes')">
-        <img
-          class="mdc-list-item__graphic list-item-icon"
-          src="/src/icons/dataTypes/allDataTypes.svg"
-        />
-        {{ getText('menuItemTitle_allDataTypes') }}
-      </li>
-    </ul>
-    <ul
-      class="mdc-list list list-separator"
-      v-if="clearAllDataTypes || hasScrollBar"
-    >
-      <li role="separator" class="mdc-list-divider"></li>
-    </ul>
-    <div class="list-items-wrap" ref="items" :class="listClasses">
-      <resize-observer @notify="handleSizeChange"></resize-observer>
-      <ul class="mdc-list list list-items">
-        <li
-          class="mdc-list-item list-item"
-          v-for="dataType in dataTypes"
-          :key="dataType.id"
-          @click="selectItem(dataType)"
+    <vn-divider class="header-separator" :class="separatorClasses"></vn-divider>
+
+    <div class="list-items-wrap" ref="items" @scroll="onListScroll">
+      <resize-observer @notify="onListSizeChange"></resize-observer>
+      <vn-list class="list-items">
+        <vn-list-item
+          v-if="clearAllDataTypes"
+          :title="getText('menuItemTitle_allDataTypes')"
+          @click="selectItem('allDataTypes')"
         >
-          <img
-            class="mdc-list-item__graphic list-item-icon"
-            :src="`/src/icons/dataTypes/${dataType}.svg`"
-          />
-          {{ getText(`menuItemTitle_${dataType}`) }}
-        </li>
-      </ul>
+          <template v-slot:prepend v-if="showDataTypeIcons">
+            <img
+              class="list-item-icon"
+              v-if="showDataTypeIcons"
+              :src="getDataTypeIcon('allDataTypes', {variant: theme})"
+            />
+          </template>
+        </vn-list-item>
+
+        <vn-divider
+          class="list-separator"
+          v-if="clearAllDataTypes"
+        ></vn-divider>
+
+        <template v-for="item of dataTypes">
+          <vn-list-item
+            :title="getText(`menuItemTitle_${item}`)"
+            @click="selectItem(item)"
+          >
+            <template v-slot:prepend v-if="showDataTypeIcons">
+              <img
+                class="list-item-icon"
+                :src="getDataTypeIcon(item, {variant: theme})"
+              />
+            </template>
+          </vn-list-item>
+        </template>
+      </vn-list>
     </div>
-  </div>
+
+    <vn-dialog
+      v-model="openConfirmationDialog"
+      content-class="confirmation-dialog__content"
+      transition="scale-transition"
+    >
+      <vn-card>
+        <vn-card-title>{{
+          getText('dialogTitle_clearConfirmation')
+        }}</vn-card-title>
+
+        <vn-card-text>{{
+          getText('dialogText_clearConfirmation')
+        }}</vn-card-text>
+
+        <div class="vn-card-options">
+          <vn-checkbox
+            :label="getText('checkboxLabel_noConfirmation')"
+            v-model="noConfirmation"
+          ></vn-checkbox>
+        </div>
+
+        <vn-card-actions>
+          <vn-button @click="openConfirmationDialog = false" variant="text">
+            {{ getText('buttonLabel_cancel') }}
+          </vn-button>
+          <vn-button @click="confirmSelectedItem" variant="tonal">
+            {{ getText('buttonLabel_clearData') }}
+          </vn-button>
+        </vn-card-actions>
+      </vn-card>
+    </vn-dialog>
+  </vn-app>
 </template>
 
 <script>
-import browser from 'webextension-polyfill';
+import {toRaw} from 'vue';
 import {ResizeObserver} from 'vue-resize';
-import {MDCList} from '@material/list';
-import {MDCRipple} from '@material/ripple';
-import {IconButton, Select, Menu} from 'ext-components';
+import {
+  App,
+  Button,
+  Card,
+  CardActions,
+  CardText,
+  CardTitle,
+  Checkbox,
+  Dialog,
+  Divider,
+  Icon,
+  IconButton,
+  List,
+  ListItem,
+  Menu,
+  MenuIconButton,
+  Select
+} from 'vueton';
 
 import storage from 'storage/storage';
 import {
   getEnabledDataTypes,
   getListItems,
   showContributePage,
-  showProjectPage
+  showOptionsPage,
+  showSupportPage,
+  getDataTypeIcon,
+  handleBrowserActionEscapeKey,
+  getAppTheme
 } from 'utils/app';
-import {getText, isAndroid} from 'utils/common';
+import {getText, getActiveTab} from 'utils/common';
+import {enableContributions} from 'utils/config';
 import {optionKeys} from 'utils/data';
 
 export default {
   components: {
+    [App.name]: App,
+    [Button.name]: Button,
+    [Card.name]: Card,
+    [CardActions.name]: CardActions,
+    [CardText.name]: CardText,
+    [CardTitle.name]: CardTitle,
+    [Checkbox.name]: Checkbox,
+    [Dialog.name]: Dialog,
+    [Divider.name]: Divider,
+    [Icon.name]: Icon,
     [IconButton.name]: IconButton,
-    [Select.name]: Select,
+    [List.name]: List,
+    [ListItem.name]: ListItem,
     [Menu.name]: Menu,
+    [MenuIconButton.name]: MenuIconButton,
+    [Select.name]: Select,
     [ResizeObserver.name]: ResizeObserver
   },
 
@@ -117,9 +236,31 @@ export default {
     return {
       dataLoaded: false,
 
-      showActionSettings: false,
-
       listItems: {
+        ...getListItems(
+          {
+            actionMenu: [
+              {
+                value: 'options',
+                icon: 'settings-light',
+                isVisible: true,
+                isPinnedStateProp: 'pinActionToolbarOptions'
+              },
+              {
+                value: 'contribute',
+                icon: 'favorite-light',
+                isVisibleStateProp: 'enableContributions',
+                isPinnedStateProp: 'pinActionToolbarContribute'
+              },
+              {
+                value: 'support',
+                icon: 'help-light',
+                isVisible: true
+              }
+            ]
+          },
+          {scope: 'actionMenu'}
+        ),
         ...getListItems(
           {
             clearSince: [
@@ -138,35 +279,72 @@ export default {
             ]
           },
           {scope: 'optionValue_clearSince'}
-        ),
-        ...getListItems(
-          {actionMenu: ['options', 'website']},
-          {scope: 'actionMenu'}
         )
       },
       hasScrollBar: false,
-      isPopup: false,
-      tabId: null,
+      isScrolled: false,
 
       dataTypes: [],
       clearAllDataTypes: false,
-      clearSince: ''
+      showDataTypeIcons: false,
+
+      clearSince: '',
+      confirmDataRemoval: false,
+
+      theme: '',
+
+      pinActionToolbarOptions: false,
+      pinActionToolbarContribute: false,
+
+      openActionMenu: false,
+
+      openConfirmationDialog: false,
+
+      selectedItem: null,
+      noConfirmation: false,
+
+      enableContributions
     };
   },
 
   computed: {
-    listClasses: function () {
+    separatorClasses: function () {
       return {
-        'list-items-max-height': this.isPopup
+        visible: this.isScrolled
       };
+    },
+
+    showSettings: function () {
+      return false;
     }
   },
 
   methods: {
     getText,
 
-    selectItem: function (item) {
-      browser.runtime.sendMessage({
+    getDataTypeIcon,
+
+    selectItem: async function (item) {
+      if (this.confirmDataRemoval) {
+        this.selectedItem = item;
+        this.showConfirmationDialog();
+      } else {
+        this.processSelection(item);
+      }
+    },
+
+    confirmSelectedItem: async function () {
+      this.hideConfirmationDialog();
+
+      if (this.noConfirmation) {
+        await storage.set({confirmDataRemoval: false});
+      }
+
+      await this.processSelection(this.selectedItem);
+    },
+
+    processSelection: async function (item) {
+      await browser.runtime.sendMessage({
         id: 'actionPopupSubmit',
         item
       });
@@ -180,82 +358,246 @@ export default {
     },
 
     showOptions: async function () {
-      await browser.runtime.openOptionsPage();
+      await showOptionsPage();
       this.closeAction();
     },
 
-    showWebsite: async function () {
-      await showProjectPage();
+    showSupport: async function () {
+      await showSupportPage();
       this.closeAction();
     },
 
     showActionMenu: function () {
-      this.$refs.actionMenu.$emit('open');
+      this.openActionMenu = true;
+    },
+
+    hideActionMenu: function () {
+      this.openActionMenu = false;
+    },
+
+    showConfirmationDialog: function () {
+      this.noConfirmation = false;
+      this.openConfirmationDialog = true;
+    },
+
+    hideConfirmationDialog: function () {
+      this.openConfirmationDialog = false;
     },
 
     onActionMenuSelect: async function (item) {
+      this.hideActionMenu();
+
       if (item === 'options') {
         await this.showOptions();
-      } else if (item === 'website') {
-        await this.showWebsite();
+      } else if (item === 'contribute') {
+        await this.showContribute();
+      } else if (item === 'support') {
+        await this.showSupport();
       }
     },
 
+    setupPinnedButtons: function ({maxPins = 0} = {}) {
+      const pinnedButtons = this.listItems.actionMenu.filter(
+        item =>
+          this[item.isPinnedStateProp] &&
+          (item.isVisible || this[item.isVisibleStateProp])
+      );
+
+      for (const button of pinnedButtons.reverse().slice(maxPins)) {
+        this[button.isPinnedStateProp] = false;
+      }
+    },
+
+    updatePinnedButtonState: function (item, state) {
+      if (state) {
+        this.setupPinnedButtons({maxPins: 2});
+      }
+
+      this[item.isPinnedStateProp] = state;
+    },
+
     closeAction: async function () {
-      if (this.tabId) {
-        browser.tabs.remove(this.tabId);
+      const currentTab = await browser.tabs.getCurrent();
+
+      // Safari 14: tabs.getCurrent returns active tab instead of undefined.
+      // Samsung Internet 18: tabs.getCurrent returns a tab
+      // instead of undefined, and tab.id refers to a nonexistent tab.
+      if (
+        currentTab &&
+        currentTab.id !== browser.tabs.TAB_ID_NONE &&
+        !this.$env.isSafari &&
+        !this.$env.isSamsung
+      ) {
+        browser.tabs.remove(currentTab.id);
       } else {
         window.close();
       }
     },
 
-    handleSizeChange: function () {
-      const items = this.$refs.items;
-      this.hasScrollBar = items.scrollHeight > items.clientHeight;
+    settingsBeforeEnter: function () {
+      this.lockPopupHeight();
+    },
+
+    settingsBeforeLeave: function () {
+      this.lockPopupHeight();
     },
 
     settingsAfterEnter: function () {
-      this.handleSizeChange();
-      this.$refs.clearSinceSelect.$el
-        .querySelector('.mdc-select__selected-text')
-        .focus();
+      this.configureScrollBar();
+    },
+
+    settingsAfterLeave: function () {
+      this.unlockPopupHeight();
+      this.configureScrollBar();
+    },
+
+    onListSizeChange: function () {
+      this.configureScrollBar();
+      if (this.$env.isMobile && this.$env.isSafari) {
+        // Safari 15: window.onresize is not always fired on mobile.
+        this.setViewportSize();
+      }
+    },
+
+    onListScroll: function () {
+      this.configureScrollBar();
+    },
+
+    configureScrollBar: function () {
+      const items = this.$refs.items;
+      this.hasScrollBar = items.scrollHeight > items.clientHeight;
+      this.isScrolled = Boolean(items.scrollTop);
+    },
+
+    lockPopupHeight: function () {
+      if (
+        (this.$env.isAndroid || this.$env.isFirefox) &&
+        !document.documentElement.style.height
+      ) {
+        const {height} = document.documentElement.getBoundingClientRect();
+        document.documentElement.style.height = `${height}px`;
+      }
+    },
+
+    unlockPopupHeight: function () {
+      if (
+        (this.$env.isAndroid || this.$env.isFirefox) &&
+        document.documentElement.style.height.endsWith('px')
+      ) {
+        document.documentElement.style.height = '';
+      }
+    },
+
+    setViewportSize: async function () {
+      const activeTab = await getActiveTab();
+      const actionWidth = window.innerWidth;
+
+      if (activeTab && actionWidth && activeTab.width > actionWidth) {
+        // popup
+        if (!document.documentElement.style.height.endsWith('px')) {
+          document.documentElement.style.height = '';
+        }
+        if (this.$env.isMobile) {
+          // mobile popup
+          if (activeTab.width < 394) {
+            document.body.style.minWidth = `${activeTab.width - 40}px`;
+          } else {
+            document.body.style.minWidth = '354px';
+          }
+          this.$el.style.maxHeight = `${activeTab.height - 40}px`;
+
+          if (this.$env.isIpados) {
+            // 9 * 48px (list item) + 8px (padding)
+            this.$refs.items.style.maxHeight = '440px';
+          }
+        } else {
+          // desktop popup
+          // 9 * 48px (list item) + 8px (padding)
+          this.$refs.items.style.maxHeight = '440px';
+        }
+      } else {
+        // full-width page
+        document.documentElement.style.height = '100%';
+        if (activeTab && activeTab.width >= 354) {
+          document.body.style.minWidth = '354px';
+        } else {
+          document.body.style.minWidth = 'initial';
+        }
+        this.$el.style.maxHeight = 'initial';
+        this.$refs.items.style.maxHeight = 'initial';
+      }
+    },
+
+    setup: async function () {
+      window.addEventListener('resize', this.setViewportSize);
+      window.addEventListener('orientationchange', () =>
+        window.setTimeout(this.setViewportSize, 1000)
+      );
+      await this.setViewportSize();
+
+      const options = await storage.get(optionKeys);
+      const enDataTypes = await getEnabledDataTypes(options);
+
+      if (
+        this.$env.isFirefox &&
+        this.$env.isAndroid &&
+        (enDataTypes.length <= 1 || options.clearAllDataTypesAction === 'main')
+      ) {
+        // Removing the action popup has no effect on Firefox for Android
+        showNotification({messageId: 'error_optionsNotApplied'});
+        return;
+      }
+
+      this.dataTypes = enDataTypes;
+      this.clearAllDataTypes =
+        options.clearAllDataTypesAction === 'sub' && !this.$env.isSamsung;
+      this.showDataTypeIcons = options.showDataTypeIcons;
+      this.confirmDataRemoval = options.confirmDataRemoval;
+
+      const syncOptions = [
+        'clearSince',
+        'pinActionToolbarOptions',
+        'pinActionToolbarContribute'
+      ];
+
+      for (const option of syncOptions) {
+        this[option] = options[option];
+
+        this.$watch(
+          option,
+          async function (value) {
+            await storage.set({[option]: toRaw(value)});
+          },
+          {deep: true}
+        );
+      }
+
+      this.setupPinnedButtons({maxPins: 3});
+
+      this.theme = await getAppTheme(options.appTheme);
+      document.addEventListener('themeChange', ev => {
+        this.theme = ev.detail;
+      });
+
+      this.dataLoaded = true;
     }
   },
 
-  created: async function () {
-    const currentTab = await browser.tabs.getCurrent();
-    if (currentTab) {
-      this.tabId = currentTab.id;
-    }
-    this.isPopup = !this.tabId && !(await isAndroid());
-    if (!this.isPopup) {
-      document.documentElement.style.height = '100%';
-      document.body.style.minWidth = 'initial';
-    }
-
-    const options = await storage.get(optionKeys, 'sync');
-    const enDataTypes = await getEnabledDataTypes(options);
-
-    this.dataTypes = enDataTypes;
-    this.clearAllDataTypes = options.clearAllDataTypesAction === 'sub';
-    this.clearSince = options.clearSince;
-
-    this.$watch('clearSince', async function (value) {
-      await storage.set({clearSince: value}, 'sync');
-    });
-
-    this.dataLoaded = true;
+  created: function () {
+    this.setup();
   },
 
   mounted: function () {
+    handleBrowserActionEscapeKey();
+
     window.setTimeout(() => {
-      for (const listEl of document.querySelectorAll(
-        '.list-bulk-button, .list-items'
-      )) {
-        const list = new MDCList(listEl);
-        for (const el of list.listElements) {
-          MDCRipple.attachTo(el);
-        }
+      if (this.searchModeAction === 'url' && !this.$env.isMobile) {
+        this.focusDocUrlInput();
+      }
+
+      if (this.$env.isMobile && this.$env.isSafari) {
+        // Safari 15: window.onresize is not always fired on mobile.
+        this.setViewportSize();
       }
     }, 500);
   }
@@ -263,104 +605,128 @@ export default {
 </script>
 
 <style lang="scss">
-$mdc-theme-primary: #1abc9c;
-
-@import '@material/list/mdc-list';
-@import '@material/select/mdc-select';
-@import '@material/icon-button/mixins';
-@import '@material/theme/mixins';
-@import '@material/typography/mixins';
-
+@use 'vueton/styles' as vueton;
 @import 'vue-resize/dist/vue-resize';
 
+@include vueton.theme-base;
+@include vueton.transitions;
+
 body,
-#app {
+.vn-app,
+.v-application__wrap {
   height: 100%;
 }
 
-#app {
+.v-application__wrap {
   display: flex;
   flex-direction: column;
+
+  min-height: initial;
 }
 
 body {
   margin: 0;
-  min-width: 387px;
+  min-width: 354px;
   overflow: hidden;
-  @include mdc-typography-base;
-  font-size: 100%;
-  background-color: #ffffff;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  column-gap: 12px;
   white-space: nowrap;
-  padding-top: 16px;
-  padding-left: 16px;
+  padding-left: 4px;
   padding-right: 4px;
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 
-.title {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  @include mdc-typography(headline6);
-  @include mdc-theme-prop(color, text-primary-on-light);
-}
-
-.header-buttons {
+.header-content {
   display: flex;
   align-items: center;
   height: 24px;
-  margin-left: 56px;
-  @media (max-width: 386px) {
-    margin-left: 32px;
-  }
 }
 
-.contribute-button,
-.settings-button,
-.menu-button {
-  @include mdc-icon-button-icon-size(24px, 24px, 6px);
+.options-button,
+.contribute-button {
+  margin-left: 8px;
+}
 
-  &::before {
-    --mdc-ripple-fg-size: 20px;
-    --mdc-ripple-fg-scale: 1.8;
-    --mdc-ripple-left: 8px;
-    --mdc-ripple-top: 8px;
-  }
+.menu-button {
+  margin-left: 4px;
 }
 
 .contribute-button {
-  margin-right: 4px;
+  & .vn-icon {
+    @include vueton.theme-prop(background-color, cta);
+  }
 }
 
-.settings-button {
-  margin-right: 12px;
-}
-
-.action-menu {
-  left: auto !important;
+.clear-since-menu__content {
   top: 56px !important;
-  right: 16px;
-  transform-origin: top right !important;
+  left: 16px !important;
+  transform-origin: center top !important;
+  max-height: calc(100% - 56px - 16px) !important;
+
+  & .v-list-item {
+    & .v-list-item-title {
+      padding-left: 16px !important;
+    }
+  }
+}
+
+.action-menu__content {
+  top: 56px !important;
+  left: auto !important;
+  right: 16px !important;
+  transform-origin: right top !important;
+  max-height: calc(100% - 56px - 16px) !important;
+
+  & .v-list-item {
+    & .v-list-item__append {
+      margin-right: 4px !important;
+    }
+  }
+}
+
+.confirmation-dialog__content {
+  transform-origin: center center !important;
+
+  & .vn-card {
+    @include vueton.theme-prop(background-color, menu-surface);
+
+    & .vn-card-options {
+      & .vn-checkbox {
+        margin-left: -10px;
+        margin-top: -4px;
+        margin-bottom: -4px;
+      }
+    }
+
+    & .vn-card-actions {
+      & .vn-button {
+        @include vueton.theme-prop(color, primary);
+      }
+    }
+  }
 }
 
 .settings {
-  padding: 16px;
+  padding-top: 8px;
+  padding-bottom: 24px;
 }
 
 .settings-enter-active,
 .settings-leave-active {
   max-height: 100px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding-top: 8px;
+  padding-bottom: 24px;
   transition: max-height 0.3s ease, padding-top 0.3s ease,
     padding-bottom 0.3s ease, opacity 0.2s ease;
 }
 
-.settings-enter,
+.settings-enter-from,
 .settings-leave-to {
   max-height: 0;
   padding-top: 0;
@@ -368,43 +734,33 @@ body {
   opacity: 0;
 }
 
-.list {
-  padding: 0 !important;
-}
-
-.list-padding-top {
-  margin-bottom: 8px;
-}
-
-.list-bulk-button {
-  position: relative;
-  height: 48px;
+.header-separator {
+  opacity: 0 !important;
+  transition: opacity 0.1s ease;
 }
 
 .list-separator {
-  position: relative;
-  height: 1px;
+  margin-top: -1px;
+}
+
+.visible {
+  opacity: 1 !important;
 }
 
 .list-items-wrap {
   overflow-y: auto;
 }
 
-.list-items-max-height {
-  max-height: 392px;
-}
-
 .list-items {
   padding-bottom: 8px !important;
 }
 
-.list-item {
-  padding-left: 16px;
-  padding-right: 48px;
-  cursor: pointer;
+.list-item-icon {
+  width: 24px;
+  height: 24px;
 }
 
-.list-item-icon {
-  margin-right: 16px !important;
+html.firefox.android {
+  height: 100%;
 }
 </style>

@@ -1,6 +1,12 @@
-const path = require('path');
-const {exec} = require('child_process');
-const {lstatSync, readdirSync, readFileSync, writeFileSync} = require('fs');
+const path = require('node:path');
+const {exec} = require('node:child_process');
+const {
+  lstatSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+  rmSync
+} = require('node:fs');
 
 const {series, parallel, src, dest} = require('gulp');
 const postcss = require('gulp-postcss');
@@ -9,24 +15,29 @@ const jsonMerge = require('gulp-merge-json');
 const jsonmin = require('gulp-jsonmin');
 const htmlmin = require('gulp-htmlmin');
 const imagemin = require('gulp-imagemin');
-const del = require('del');
 const {ensureDirSync} = require('fs-extra');
 const sharp = require('sharp');
 
-const targetEnv = process.env.TARGET_ENV || 'firefox';
+const targetEnv = process.env.TARGET_ENV || 'chrome';
 const isProduction = process.env.NODE_ENV === 'production';
-const distDir = path.join('dist', targetEnv);
+const enableContributions =
+  (process.env.ENABLE_CONTRIBUTIONS || 'true') === 'true';
+const distDir = path.join(__dirname, 'dist', targetEnv);
 
-function clean() {
-  return del([distDir]);
+function initEnv() {
+  process.env.BROWSERSLIST_ENV = targetEnv;
+}
+
+function init(done) {
+  initEnv();
+
+  rmSync(distDir, {recursive: true, force: true});
+  ensureDirSync(distDir);
+  done();
 }
 
 function js(done) {
-  exec('webpack-cli --display-error-details --bail --colors', function (
-    err,
-    stdout,
-    stderr
-  ) {
+  exec('webpack-cli build --color', function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
     done(err);
@@ -34,24 +45,32 @@ function js(done) {
 }
 
 function html() {
-  return src('src/**/*.html', {base: '.'})
+  return src(
+    enableContributions
+      ? 'src/**/*.html'
+      : ['src/**/*.html', '!src/contribute/*.html'],
+    {base: '.'}
+  )
     .pipe(gulpif(isProduction, htmlmin({collapseWhitespace: true})))
     .pipe(dest(distDir));
 }
 
 async function images(done) {
-  ensureDirSync(path.join(distDir, 'src/icons/app'));
-  const appIconSvg = readFileSync('src/icons/app/icon.svg');
+  ensureDirSync(path.join(distDir, 'src/assets/icons/app'));
+  const appIconSvg = readFileSync('src/assets/icons/app/icon.svg');
   const appIconSizes = [16, 19, 24, 32, 38, 48, 64, 96, 128];
+  if (targetEnv === 'safari') {
+    appIconSizes.push(256, 512, 1024);
+  }
   for (const size of appIconSizes) {
     await sharp(appIconSvg, {density: (72 * size) / 24})
       .resize(size)
-      .toFile(path.join(distDir, `src/icons/app/icon-${size}.png`));
+      .toFile(path.join(distDir, `src/assets/icons/app/icon-${size}.png`));
   }
   // Chrome Web Store does not correctly display optimized icons
   if (isProduction && targetEnv !== 'chrome') {
     await new Promise(resolve => {
-      src(path.join(distDir, 'src/icons/app/*.png'), {base: '.'})
+      src(path.join(distDir, 'src/assets/icons/app/*.png'), {base: '.'})
         .pipe(imagemin())
         .pipe(dest('.'))
         .on('error', done)
@@ -60,25 +79,27 @@ async function images(done) {
   }
 
   await new Promise(resolve => {
-    src('src/icons/@(dataTypes|misc)/*.@(png|svg)', {base: '.'})
+    src('src/assets/icons/@(app|datatypes|misc)/*.@(png|svg)', {base: '.'})
       .pipe(gulpif(isProduction, imagemin()))
       .pipe(dest(distDir))
       .on('error', done)
       .on('finish', resolve);
   });
 
-  await new Promise(resolve => {
-    src('node_modules/ext-contribute/src/assets/*.@(jpg|png|svg)')
-      .pipe(gulpif(isProduction, imagemin()))
-      .pipe(dest(path.join(distDir, 'src/contribute/assets')))
-      .on('error', done)
-      .on('finish', resolve);
-  });
+  if (enableContributions) {
+    await new Promise(resolve => {
+      src('node_modules/vueton/components/contribute/assets/*.@(png|svg)')
+        .pipe(gulpif(isProduction, imagemin()))
+        .pipe(dest(path.join(distDir, 'src/contribute/assets')))
+        .on('error', done)
+        .on('finish', resolve);
+    });
+  }
 }
 
 async function fonts(done) {
   await new Promise(resolve => {
-    src('src/fonts/roboto.css', {base: '.'})
+    src('src/assets/fonts/roboto.css', {base: '.'})
       .pipe(postcss())
       .pipe(dest(distDir))
       .on('error', done)
@@ -86,15 +107,17 @@ async function fonts(done) {
   });
 
   await new Promise(resolve => {
-    src('node_modules/typeface-roboto/files/roboto-latin-@(400|500|700).woff2')
-      .pipe(dest(path.join(distDir, 'src/fonts/files')))
+    src(
+      'node_modules/@fontsource/roboto/files/roboto-latin-@(400|500|700)-normal.woff2'
+    )
+      .pipe(dest(path.join(distDir, 'src/assets/fonts/files')))
       .on('error', done)
       .on('finish', resolve);
   });
 }
 
 async function locale(done) {
-  const localesRootDir = path.join(__dirname, 'src/_locales');
+  const localesRootDir = path.join(__dirname, 'src/assets/locales');
   const localeDirs = readdirSync(localesRootDir).filter(function (file) {
     return lstatSync(path.join(localesRootDir, file)).isDirectory();
   });
@@ -132,31 +155,11 @@ async function locale(done) {
 }
 
 function manifest() {
-  return src('src/manifest.json')
+  return src(`src/assets/manifest/${targetEnv}.json`)
     .pipe(
       jsonMerge({
         fileName: 'manifest.json',
-        jsonSpace: '  ',
         edit: (parsedJson, file) => {
-          if (['chrome', 'edge', 'opera'].includes(targetEnv)) {
-            delete parsedJson.browser_specific_settings;
-            delete parsedJson.browser_action.browser_style;
-            delete parsedJson.options_ui.browser_style;
-          }
-
-          if (['firefox', 'edge', 'chrome'].includes(targetEnv)) {
-            delete parsedJson.minimum_opera_version;
-          }
-
-          if (['firefox', 'opera'].includes(targetEnv)) {
-            delete parsedJson.minimum_chrome_version;
-          }
-
-          if (targetEnv === 'firefox') {
-            delete parsedJson.options_ui.chrome_style;
-            delete parsedJson.incognito;
-          }
-
           parsedJson.version = require('./package.json').version;
           return parsedJson;
         }
@@ -173,7 +176,7 @@ function license() {
     year = `${year}-${currentYear}`;
   }
 
-  const notice = `Web Archives
+  const notice = `Clear Browsing Data
 Copyright (c) ${year} Armin Sebastian
 
 This software is released under the terms of the GNU General Public License v3.0.
@@ -181,12 +184,12 @@ See the LICENSE file for further information.
 `;
 
   writeFileSync(path.join(distDir, 'NOTICE'), notice);
-  return src(['LICENSE']).pipe(dest(distDir));
+  return src('LICENSE').pipe(dest(distDir));
 }
 
 function zip(done) {
   exec(
-    `web-ext build -s dist/${targetEnv} -a artifacts/${targetEnv} -n '{name}-{version}-${targetEnv}.zip' --overwrite-dest`,
+    `web-ext build -s dist/${targetEnv} -a artifacts/${targetEnv} -n "{name}-{version}-${targetEnv}.zip" --overwrite-dest`,
     function (err, stdout, stderr) {
       console.log(stdout);
       console.log(stderr);
@@ -196,8 +199,13 @@ function zip(done) {
 }
 
 function inspect(done) {
+  initEnv();
+
   exec(
-    `webpack --profile --json > report.json && webpack-bundle-analyzer report.json dist/firefox/src && sleep 10 && rm report.{json,html}`,
+    `npm run build:prod:chrome && \
+    webpack --profile --json > report.json && \
+    webpack-bundle-analyzer --mode static report.json dist/chrome/src && \
+    sleep 3 && rm report.{json,html}`,
     function (err, stdout, stderr) {
       console.log(stdout);
       console.log(stderr);
@@ -207,7 +215,7 @@ function inspect(done) {
 }
 
 exports.build = series(
-  clean,
+  init,
   parallel(js, html, images, fonts, locale, manifest, license)
 );
 exports.zip = zip;

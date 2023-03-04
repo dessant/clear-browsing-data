@@ -1,120 +1,159 @@
 <template>
-  <div id="app" v-if="dataLoaded">
-    <div class="section">
+  <vn-app id="app" v-if="dataLoaded">
+    <div class="section-datatypes">
       <div class="section-title" v-once>
         {{ getText('optionSectionTitle_dataTypes') }}
       </div>
       <div class="section-desc" v-once>
         {{ getText('optionSectionDescription_dataTypes') }}
       </div>
-      <v-draggable class="option-wrap" :list="options.dataTypes">
-        <div
-          class="option"
-          v-for="dataType in options.dataTypes"
-          :key="dataType.id"
-        >
-          <v-form-field
-            :input-id="dataType"
-            :label="getText(`optionTitle_${dataType}`)"
-          >
-            <v-checkbox
-              :id="dataType"
-              :checked="dataTypeEnabled(dataType)"
-              @change="setDataTypeState(dataType, $event)"
+
+      <v-draggable
+        class="option-wrap"
+        v-model="options.dataTypes"
+        item-key="id"
+        :delay="120"
+      >
+        <template #item="{element}">
+          <div class="option">
+            <vn-checkbox
+              :label="getText(`optionTitle_${element}`)"
+              :model-value="dataTypeEnabled(element)"
+              @click="setDataTypeState(element, $event.target.checked)"
             >
-            </v-checkbox>
-          </v-form-field>
-        </div>
+            </vn-checkbox>
+          </div>
+        </template>
       </v-draggable>
     </div>
 
-    <div class="section">
+    <div class="section-tabs">
       <div class="section-title" v-once>
         {{ getText('optionSectionTitle_tabs') }}
       </div>
       <div class="option-wrap">
         <div class="option select">
-          <v-select
+          <vn-select
             :label="getText('optionTitle_closeTabs')"
+            :items="listItems.closeTabs"
             v-model="options.closeTabs"
-            :options="listItems.closeTabs"
+            transition="scale-transition"
           >
-          </v-select>
+          </vn-select>
         </div>
         <div
           class="option"
           v-show="!['exit', 'false'].includes(options.closeTabs)"
         >
-          <v-form-field
-            input-id="cpt"
+          <vn-switch
             :label="getText('optionTitle_closePinnedTabs')"
-          >
-            <v-switch id="cpt" v-model="options.closePinnedTabs"> </v-switch>
-          </v-form-field>
+            v-model="options.closePinnedTabs"
+          ></vn-switch>
         </div>
         <div class="option select" v-show="options.closeTabs !== 'exit'">
-          <v-select
+          <vn-select
             :label="getText('optionTitle_reloadTabs')"
+            :items="listItems.reloadTabs"
             v-model="options.reloadTabs"
-            :options="listItems.reloadTabs"
+            transition="scale-transition"
           >
-          </v-select>
+          </vn-select>
         </div>
       </div>
     </div>
 
-    <div class="section">
+    <div class="section-misc">
       <div class="section-title" v-once>
         {{ getText('optionSectionTitle_misc') }}
       </div>
       <div class="option-wrap">
         <div class="option select">
-          <v-select
-            :label="getText('optionTitle_clearAllDataTypes')"
-            v-model="options.clearAllDataTypesAction"
-            :options="listItems.clearAllDataTypesAction"
+          <vn-select
+            :label="getText('optionTitle_appTheme')"
+            :items="listItems.appTheme"
+            v-model="options.appTheme"
+            transition="scale-transition"
           >
-          </v-select>
+          </vn-select>
         </div>
         <div class="option select">
-          <v-select
-            :label="getText('optionTitle_clearSince')"
-            v-model="options.clearSince"
-            :options="listItems.clearSince"
+          <vn-select
+            :label="getText('optionTitle_clearAllDataTypes')"
+            :items="listItems.clearAllDataTypesAction"
+            v-model="options.clearAllDataTypesAction"
+            transition="scale-transition"
           >
-          </v-select>
+          </vn-select>
+        </div>
+        <div class="option select">
+          <vn-select
+            :label="getText('optionTitle_clearSince')"
+            :items="listItems.clearSince"
+            v-model="options.clearSince"
+            transition="scale-transition"
+          >
+          </vn-select>
         </div>
         <div class="option">
-          <v-form-field
-            input-id="nos"
+          <vn-switch
             :label="getText('optionTitle_notifyOnSuccess')"
-          >
-            <v-switch id="nos" v-model="options.notifyOnSuccess"></v-switch>
-          </v-form-field>
+            v-model="options.notifyOnSuccess"
+          ></vn-switch>
+        </div>
+        <div class="option">
+          <vn-switch
+            :label="getText('optionTitle_showDataTypeIcons')"
+            v-model="options.showDataTypeIcons"
+          ></vn-switch>
+        </div>
+        <div class="option">
+          <vn-switch
+            :label="getText('optionTitle_confirmDataRemoval')"
+            v-model="options.confirmDataRemoval"
+          ></vn-switch>
+        </div>
+        <div class="option" v-if="enableContributions">
+          <vn-switch
+            :label="getText('optionTitle_showContribPage')"
+            v-model="options.showContribPage"
+          ></vn-switch>
+        </div>
+        <div class="option button" v-if="enableContributions">
+          <vn-button
+            class="contribute-button vn-icon--start"
+            @click="showContribute"
+            ><vn-icon
+              src="/src/assets/icons/misc/favorite-filled.svg"
+            ></vn-icon>
+            {{ getText('buttonLabel_contribute') }}
+          </vn-button>
         </div>
       </div>
     </div>
-  </div>
+  </vn-app>
 </template>
 
 <script>
-import browser from 'webextension-polyfill';
+import {toRaw} from 'vue';
+import {App, Button, Checkbox, Icon, Select, Switch} from 'vueton';
 import {includes, without} from 'lodash-es';
 import draggable from 'vuedraggable';
-import {Checkbox, Switch, Select, FormField} from 'ext-components';
 
 import storage from 'storage/storage';
-import {getListItems} from 'utils/app';
+import {getListItems, showContributePage} from 'utils/app';
 import {getText} from 'utils/common';
+import {enableContributions} from 'utils/config';
 import {optionKeys} from 'utils/data';
 
 export default {
   components: {
     'v-draggable': draggable,
+    [App.name]: App,
+    [Button.name]: Button,
     [Checkbox.name]: Checkbox,
+    [Icon.name]: Icon,
     [Switch.name]: Switch,
-    [Select.name]: Select,
-    [FormField.name]: FormField
+    [Select.name]: Select
   },
 
   data: function () {
@@ -158,8 +197,14 @@ export default {
             ]
           },
           {scope: 'optionValue_clearSince'}
+        ),
+        ...getListItems(
+          {appTheme: ['auto', 'light', 'dark']},
+          {scope: 'optionValue_appTheme'}
         )
       },
+
+      enableContributions,
 
       options: {
         dataTypes: [],
@@ -169,13 +214,36 @@ export default {
         closeTabs: '',
         closePinnedTabs: false,
         reloadTabs: '',
-        notifyOnSuccess: false
+        notifyOnSuccess: false,
+        showDataTypeIcons: false,
+        confirmDataRemoval: false,
+        appTheme: false,
+        showContribPage: false
       }
     };
   },
 
   methods: {
     getText,
+
+    setup: async function () {
+      const options = await storage.get(optionKeys);
+
+      for (const option of Object.keys(this.options)) {
+        this.options[option] = options[option];
+
+        this.$watch(
+          `options.${option}`,
+          async function (value) {
+            await storage.set({[option]: toRaw(value)});
+            await browser.runtime.sendMessage({id: 'optionChange'});
+          },
+          {deep: true}
+        );
+      }
+
+      this.dataLoaded = true;
+    },
 
     dataTypeEnabled: function (dataType) {
       return !includes(this.options.disabledDataTypes, dataType);
@@ -190,108 +258,104 @@ export default {
       } else {
         this.options.disabledDataTypes.push(dataType);
       }
+    },
+
+    showContribute: async function () {
+      await showContributePage();
     }
   },
 
-  created: async function () {
-    const options = await storage.get(optionKeys, 'sync');
-
-    for (const option of Object.keys(this.options)) {
-      this.options[option] = options[option];
-      this.$watch(`options.${option}`, async function (value) {
-        await storage.set({[option]: value}, 'sync');
-      });
-    }
-
+  created: function () {
     document.title = getText('pageTitle', [
       getText('pageTitle_options'),
       getText('extensionName')
     ]);
 
-    this.dataLoaded = true;
+    this.setup();
   }
 };
 </script>
 
 <style lang="scss">
-$mdc-theme-primary: #1abc9c;
+@use 'vueton/styles' as vueton;
 
-@import '@material/select/mdc-select';
-@import '@material/theme/mixins';
-@import '@material/typography/mixins';
+@include vueton.theme-base;
+@include vueton.transitions;
 
-body {
-  margin: 0;
-  @include mdc-typography-base;
-  font-size: 100%;
-  background-color: #ffffff;
-  overflow: visible !important;
-}
-
-#app {
+.v-application__wrap {
   display: grid;
   grid-row-gap: 32px;
+  grid-column-gap: 48px;
   padding: 24px;
-}
-
-.mdc-checkbox {
-  margin-right: 4px;
-}
-
-.mdc-switch {
-  margin-right: 16px;
-}
-
-.section-title,
-.section-desc {
-  @include mdc-theme-prop(color, text-primary-on-light);
+  grid-auto-rows: min-content;
+  grid-auto-columns: min-content;
 }
 
 .section-title {
-  @include mdc-typography(headline6);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  line-height: 32px;
 }
 
 .section-desc {
-  @include mdc-typography(body2);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.25px;
+  line-height: 20px;
+
   padding-top: 8px;
+  width: 272px;
 }
 
 .option-wrap {
   display: grid;
   grid-row-gap: 24px;
   padding-top: 24px;
-  grid-auto-columns: min-content;
 }
 
 .option {
   display: flex;
   align-items: center;
-  height: 24px;
+  height: 20px;
 
-  & .mdc-form-field {
-    max-width: calc(100vw - 48px);
+  &.button {
+    height: 40px;
+  }
 
-    & label {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
+  &.select,
+  &.text-field {
+    height: 56px;
   }
 }
 
-.option.select {
-  align-items: start;
-  height: 56px;
+.contribute-button {
+  @include vueton.theme-prop(color, primary);
 
-  & .mdc-select__anchor,
-  & .mdc-select__menu {
-    max-width: calc(100vw - 48px);
+  & .vn-icon {
+    @include vueton.theme-prop(background-color, cta);
+  }
+}
+
+@media (min-width: 1024px) {
+  .v-application__wrap {
+    grid-template-columns: 464px 464px;
+    grid-template-rows: min-content 1fr;
+    grid-template-areas:
+      'datatypes tabs'
+      'datatypes misc';
   }
 
-  & .mdc-select__selected-text {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  .section-datatypes {
+    grid-area: datatypes;
+  }
+
+  .section-tabs {
+    grid-area: tabs;
+  }
+
+  .section-misc {
+    grid-area: misc;
   }
 }
 </style>

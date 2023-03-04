@@ -1,17 +1,25 @@
 <template>
-  <div id="app">
-    <v-contribute :extName="extName" :extSlug="extSlug" :notice="notice">
-    </v-contribute>
-  </div>
+  <vn-app id="app">
+    <vn-contribute
+      :extName="extName"
+      :extSlug="extSlug"
+      :notice="notice"
+      @open="contribute"
+    >
+    </vn-contribute>
+  </vn-app>
 </template>
 
 <script>
-import {Contribute} from 'ext-contribute';
+import {App} from 'vueton';
+import {Contribute} from 'vueton/components/contribute';
 
+import {showPage} from 'utils/app';
 import {getText} from 'utils/common';
 
 export default {
   components: {
+    [App.name]: App,
     [Contribute.name]: Contribute
   },
 
@@ -23,31 +31,37 @@ export default {
     };
   },
 
+  methods: {
+    setup: function () {
+      const query = new URL(window.location.href).searchParams;
+      if (query.get('action') === 'auto') {
+        this.notice = `This page is shown once a year while using the extension.`;
+      }
+    },
+
+    contribute: async function ({url} = {}) {
+      await showPage({url});
+    }
+  },
+
   created: function () {
     document.title = getText('pageTitle', [
       getText('pageTitle_contribute'),
       this.extName
     ]);
 
-    const query = new URL(window.location.href).searchParams;
-    if (query.get('action') === 'clear') {
-      this.notice = `This page is shown during your 10th and 50th
-          use of the extension.`;
-    }
+    this.setup();
   }
 };
 </script>
 
 <style lang="scss">
-@import '@material/typography/mixins';
+@use 'vueton/styles' as vueton;
 
-body {
+@include vueton.theme-base;
+
+.v-application__wrap {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin: 0;
-  @include mdc-typography-base;
-  font-size: 100%;
-  background-color: #ffffff;
 }
 </style>
