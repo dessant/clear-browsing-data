@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/dessant/clear-browsing-data/compare/v3.2.0...v4.0.0) (2023-03-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* browser versions older than Chrome 92, Edge 92,
+Firefox 91, and Opera 78 are no longer supported
+
+### Features
+
+* migrate to Vuetify ([2739cad](https://github.com/dessant/clear-browsing-data/commit/2739cad852328ea7635757612e25e0cf477ef778))
+
+
+### Bug Fixes
+
+* update extension CSP ([5575014](https://github.com/dessant/clear-browsing-data/commit/557501492e0366c954ae2728a94b2c9a7728dd4b))
+
 ## [3.2.0](https://github.com/dessant/clear-browsing-data/compare/v3.1.1...v3.2.0) (2020-09-28)
 
 
