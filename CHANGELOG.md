@@ -12,6 +12,9 @@ Firefox 91, and Opera 78 are no longer supported
 
 ### Features
 
+* Dark mode
+* Ask before removing data
+* Option to hide data type icons
 * migrate to Vuetify ([2739cad](https://github.com/dessant/clear-browsing-data/commit/2739cad852328ea7635757612e25e0cf477ef778))
 
 
