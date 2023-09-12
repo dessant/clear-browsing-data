@@ -394,6 +394,11 @@
     "description": "Value of the option."
   },
 
+  "optionTitle_clearOnBrowserStart": {
+    "message": "Clear data on browser start",
+    "description": "Title of the option."
+  },
+
   "optionTitle_notifyOnSuccess": {
     "message": "Show notification on success",
     "description": "Title of the option."

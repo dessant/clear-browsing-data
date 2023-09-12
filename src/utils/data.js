@@ -6,6 +6,7 @@ const optionKeys = [
   'closeTabs',
   'closePinnedTabs',
   'reloadTabs',
+  'clearOnBrowserStart',
   'notifyOnSuccess',
   'showDataTypeIcons',
   'confirmDataRemoval',

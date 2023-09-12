@@ -96,6 +96,12 @@
         </div>
         <div class="option">
           <vn-switch
+            :label="getText('optionTitle_clearOnBrowserStart')"
+            v-model="options.clearOnBrowserStart"
+          ></vn-switch>
+        </div>
+        <div class="option">
+          <vn-switch
             :label="getText('optionTitle_notifyOnSuccess')"
             v-model="options.notifyOnSuccess"
           ></vn-switch>
@@ -214,6 +220,7 @@ export default {
         closeTabs: '',
         closePinnedTabs: false,
         reloadTabs: '',
+        clearOnBrowserStart: false,
         notifyOnSuccess: false,
         showDataTypeIcons: false,
         confirmDataRemoval: false,

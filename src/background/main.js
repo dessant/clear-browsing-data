@@ -67,7 +67,9 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
   }
 
   const dataTypes = {};
+  // All *SELECTED* DataTypes
   if (dataType === 'allDataTypes') {
+    // if enDataTypes is null
     if (!enDataTypes) {
       enDataTypes = await getEnabledDataTypes(options);
     }
@@ -327,6 +329,13 @@ function addMessageListener() {
   browser.runtime.onMessage.addListener(onMessage);
 }
 
+async function startup() {
+  const options = await storage.get(optionKeys);
+  if (options.clearOnBrowserStart) {
+    await clearDataType('allDataTypes');
+  }
+}
+
 async function setupUI() {
   await queue.add(setBrowserAction);
 }
@@ -337,6 +346,7 @@ async function setup() {
     await initStorage();
   }
 
+  await startup();
   await setupUI();
 }
 
