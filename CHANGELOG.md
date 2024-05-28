@@ -1,6 +1,18 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [5.0.0](https://github.com/dessant/clear-browsing-data/compare/v4.0.0...v5.0.0) (2024-05-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* browser versions older than Chrome 123, Edge 123,
+Firefox 115 and Opera 109 are no longer supported
+
+### Features
+
+* upgrade to Manifest V3 in Chrome ([e7b1115](https://github.com/dessant/clear-browsing-data/commit/e7b1115d6f7d4beb098421602d0cf9c5f04fe00d))
 
 ## [4.0.0](https://github.com/dessant/clear-browsing-data/compare/v3.2.0...v4.0.0) (2023-03-04)
 
