@@ -6,8 +6,9 @@
       "ByCtvupNz",
       "kuZ4zBZDX",
       "aPSasaNb4",
-      "20230301044301_add_theme_support"
+      "20230301044301_add_theme_support",
+      "20240514170322_add_appversion"
     ],
-    "sync": []
+    "session": ["20240514122825_initial_version"]
   }
 }

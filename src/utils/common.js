@@ -1,4 +1,5 @@
-import {targetEnv} from 'utils/config';
+import storage from 'storage/storage';
+import {targetEnv, mv3} from 'utils/config';
 
 function getText(messageName, substitutions) {
   return browser.i18n.getMessage(messageName, substitutions);
@@ -47,24 +48,69 @@ async function getActiveTab() {
   return tab;
 }
 
-async function getPlatform({fallback = true} = {}) {
-  let os, arch;
+async function isValidTab({tab, tabId = null} = {}) {
+  if (!tab && tabId !== null) {
+    tab = await browser.tabs.get(tabId).catch(err => null);
+  }
 
-  if (targetEnv === 'samsung') {
-    // Samsung Internet 13: runtime.getPlatformInfo fails.
-    os = 'android';
-    arch = '';
+  if (tab && tab.id !== browser.tabs.TAB_ID_NONE) {
+    return true;
+  }
+}
+
+let platformInfo;
+async function getPlatformInfo() {
+  if (platformInfo) {
+    return platformInfo;
+  }
+
+  if (mv3) {
+    ({platformInfo} = await storage.get('platformInfo', {area: 'session'}));
   } else {
     try {
+      platformInfo = JSON.parse(window.sessionStorage.getItem('platformInfo'));
+    } catch (err) {}
+  }
+
+  if (!platformInfo) {
+    let os, arch;
+
+    if (targetEnv === 'samsung') {
+      // Samsung Internet 13: runtime.getPlatformInfo fails.
+      os = 'android';
+      arch = '';
+    } else if (targetEnv === 'safari') {
+      // Safari: runtime.getPlatformInfo returns 'ios' on iPadOS.
+      ({os, arch} = await browser.runtime.sendNativeMessage('application.id', {
+        id: 'getPlatformInfo'
+      }));
+    } else {
       ({os, arch} = await browser.runtime.getPlatformInfo());
-    } catch (err) {
-      if (fallback) {
-        ({os, arch} = await browser.runtime.sendMessage({id: 'getPlatform'}));
-      } else {
-        throw err;
-      }
+    }
+
+    platformInfo = {os, arch};
+
+    if (mv3) {
+      await storage.set({platformInfo}, {area: 'session'});
+    } else {
+      try {
+        window.sessionStorage.setItem(
+          'platformInfo',
+          JSON.stringify(platformInfo)
+        );
+      } catch (err) {}
     }
   }
+
+  return platformInfo;
+}
+
+async function getPlatform() {
+  if (!isBackgroundPageContext()) {
+    return browser.runtime.sendMessage({id: 'getPlatform'});
+  }
+
+  let {os, arch} = await getPlatformInfo();
 
   if (os === 'win') {
     os = 'windows';
@@ -72,16 +118,9 @@ async function getPlatform({fallback = true} = {}) {
     os = 'macos';
   }
 
-  if (
-    navigator.platform === 'MacIntel' &&
-    (os === 'ios' || typeof navigator.standalone !== 'undefined')
-  ) {
-    os = 'ipados';
-  }
-
-  if (arch === 'x86-32') {
+  if (['x86-32', 'i386'].includes(arch)) {
     arch = '386';
-  } else if (arch === 'x86-64') {
+  } else if (['x86-64', 'x86_64'].includes(arch)) {
     arch = 'amd64';
   } else if (arch.startsWith('arm')) {
     arch = 'arm';
@@ -97,11 +136,13 @@ async function getPlatform({fallback = true} = {}) {
   const isMobile = ['android', 'ios', 'ipados'].includes(os);
 
   const isChrome = targetEnv === 'chrome';
-  const isEdge = targetEnv === 'edge';
+  const isEdge =
+    ['chrome', 'edge'].includes(targetEnv) &&
+    /\sedg(?:e|a|ios)?\//i.test(navigator.userAgent);
   const isFirefox = targetEnv === 'firefox';
   const isOpera =
     ['chrome', 'opera'].includes(targetEnv) &&
-    / opr\//i.test(navigator.userAgent);
+    /\sopr\//i.test(navigator.userAgent);
   const isSafari = targetEnv === 'safari';
   const isSamsung = targetEnv === 'samsung';
 
@@ -142,12 +183,43 @@ function getDayPrecisionEpoch(epoch) {
   return epoch - (epoch % 86400000);
 }
 
+function isBackgroundPageContext() {
+  const backgroundUrl = mv3
+    ? browser.runtime.getURL('/src/background/script.js')
+    : browser.runtime.getURL('/src/background/index.html');
+
+  return self.location.href === backgroundUrl;
+}
+
+function runOnce(name, func) {
+  name = `${name}Run`;
+
+  if (!self[name]) {
+    self[name] = true;
+
+    if (!func) {
+      return true;
+    }
+
+    return func();
+  }
+}
+
+function sleep(ms) {
+  return new Promise(resolve => self.setTimeout(resolve, ms));
+}
+
 export {
   getText,
   createTab,
   getActiveTab,
+  isValidTab,
+  getPlatformInfo,
   getPlatform,
   isAndroid,
   getDarkColorSchemeQuery,
-  getDayPrecisionEpoch
+  getDayPrecisionEpoch,
+  isBackgroundPageContext,
+  runOnce,
+  sleep
 };

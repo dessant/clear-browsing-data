@@ -1,5 +1,5 @@
 <template>
-  <vn-app id="app" v-if="dataLoaded">
+  <vn-app v-if="dataLoaded">
     <div class="section-datatypes">
       <div class="section-title" v-once>
         {{ getText('optionSectionTitle_dataTypes') }}

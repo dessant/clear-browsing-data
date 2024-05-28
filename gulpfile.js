@@ -22,6 +22,9 @@ const targetEnv = process.env.TARGET_ENV || 'chrome';
 const isProduction = process.env.NODE_ENV === 'production';
 const enableContributions =
   (process.env.ENABLE_CONTRIBUTIONS || 'true') === 'true';
+
+const mv3 = ['chrome'].includes(targetEnv);
+
 const distDir = path.join(__dirname, 'dist', targetEnv);
 
 function initEnv() {
@@ -45,12 +48,17 @@ function js(done) {
 }
 
 function html() {
-  return src(
-    enableContributions
-      ? 'src/**/*.html'
-      : ['src/**/*.html', '!src/contribute/*.html'],
-    {base: '.'}
-  )
+  const htmlSrc = ['src/**/*.html'];
+
+  if (mv3) {
+    htmlSrc.push('!src/background/*.html');
+  }
+
+  if (!enableContributions) {
+    htmlSrc.push('!src/contribute/*.html');
+  }
+
+  return src(htmlSrc, {base: '.'})
     .pipe(gulpif(isProduction, htmlmin({collapseWhitespace: true})))
     .pipe(dest(distDir));
 }
@@ -70,7 +78,10 @@ async function images(done) {
   // Chrome Web Store does not correctly display optimized icons
   if (isProduction && targetEnv !== 'chrome') {
     await new Promise(resolve => {
-      src(path.join(distDir, 'src/assets/icons/app/*.png'), {base: '.'})
+      src(path.join(distDir, 'src/assets/icons/app/*.png'), {
+        base: '.',
+        encoding: false
+      })
         .pipe(imagemin())
         .pipe(dest('.'))
         .on('error', done)
@@ -79,7 +90,10 @@ async function images(done) {
   }
 
   await new Promise(resolve => {
-    src('src/assets/icons/@(app|datatypes|misc)/*.@(png|svg)', {base: '.'})
+    src('src/assets/icons/@(app|datatypes|misc)/*.@(png|svg)', {
+      base: '.',
+      encoding: false
+    })
       .pipe(gulpif(isProduction, imagemin()))
       .pipe(dest(distDir))
       .on('error', done)
@@ -88,7 +102,10 @@ async function images(done) {
 
   if (enableContributions) {
     await new Promise(resolve => {
-      src('node_modules/vueton/components/contribute/assets/*.@(png|svg)')
+      src(
+        'node_modules/vueton/components/contribute/assets/*.@(png|webp|svg)',
+        {encoding: false}
+      )
         .pipe(gulpif(isProduction, imagemin()))
         .pipe(dest(path.join(distDir, 'src/contribute/assets')))
         .on('error', done)
@@ -108,7 +125,8 @@ async function fonts(done) {
 
   await new Promise(resolve => {
     src(
-      'node_modules/@fontsource/roboto/files/roboto-latin-@(400|500|700)-normal.woff2'
+      'node_modules/@fontsource/roboto/files/roboto-latin-@(400|500|700)-normal.woff2',
+      {encoding: false}
     )
       .pipe(dest(path.join(distDir, 'src/assets/fonts/files')))
       .on('error', done)
@@ -169,22 +187,28 @@ function manifest() {
     .pipe(dest(distDir));
 }
 
-function license() {
+function license(done) {
   let year = '2017';
   const currentYear = new Date().getFullYear().toString();
   if (year !== currentYear) {
     year = `${year}-${currentYear}`;
   }
 
-  const notice = `Clear Browsing Data
+  let notice = `Clear Browsing Data
 Copyright (c) ${year} Armin Sebastian
+`;
 
+  if (['safari', 'samsung'].includes(targetEnv)) {
+    writeFileSync(path.join(distDir, 'NOTICE'), notice);
+    done();
+  } else {
+    notice = `${notice}
 This software is released under the terms of the GNU General Public License v3.0.
 See the LICENSE file for further information.
 `;
-
-  writeFileSync(path.join(distDir, 'NOTICE'), notice);
-  return src('LICENSE').pipe(dest(distDir));
+    writeFileSync(path.join(distDir, 'NOTICE'), notice);
+    return src('LICENSE').pipe(dest(distDir));
+  }
 }
 
 function zip(done) {

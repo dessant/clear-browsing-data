@@ -18,22 +18,24 @@
         </vn-select>
       </div>
 
-      <div class="header-content">
-        <vn-icon-button
-          v-if="enableContributions && pinActionToolbarContribute"
-          class="contribute-button"
-          src="/src/assets/icons/misc/favorite-filled.svg"
-          :title="getText('buttonTooltip_contribute')"
-          @click="showContribute"
-        ></vn-icon-button>
+      <div class="header-content header-buttons">
+        <div class="header-content header-pinned-buttons">
+          <vn-icon-button
+            v-if="enableContributions && pinActionToolbarContribute"
+            class="contribute-button"
+            src="/src/assets/icons/misc/favorite-filled.svg"
+            :title="getText('buttonTooltip_contribute')"
+            @click="showContribute"
+          ></vn-icon-button>
 
-        <vn-icon-button
-          v-if="pinActionToolbarOptions"
-          class="options-button"
-          src="/src/assets/icons/misc/settings.svg"
-          :title="getText('buttonTooltip_options')"
-          @click="showOptions"
-        ></vn-icon-button>
+          <vn-icon-button
+            v-if="pinActionToolbarOptions"
+            class="options-button"
+            src="/src/assets/icons/misc/settings.svg"
+            :title="getText('buttonTooltip_options')"
+            @click="showOptions"
+          ></vn-icon-button>
+        </div>
 
         <vn-menu-icon-button
           id="menu-button"
@@ -72,8 +74,8 @@
 
               <template v-slot:append v-if="item.isPinnedStateProp">
                 <vn-icon-button
-                  src="/src/assets/icons/misc/push-pin-light.svg"
-                  src-on="/src/assets/icons/misc/push-pin-filled-light.svg"
+                  src="/src/assets/icons/misc/keep-light.svg"
+                  src-on="/src/assets/icons/misc/keep-filled-light.svg"
                   :title="getText('buttonTooltip_pin')"
                   :title-on="getText('buttonTooltip_unpin')"
                   :on="this[item.isPinnedStateProp]"
@@ -102,7 +104,12 @@
 
     <vn-divider class="header-separator" :class="separatorClasses"></vn-divider>
 
-    <div class="list-items-wrap" ref="items" @scroll="onListScroll">
+    <div
+      class="list-items-wrap"
+      ref="items"
+      @scroll="onListScroll"
+      tabindex="-1"
+    >
       <resize-observer @notify="onListSizeChange"></resize-observer>
       <vn-list class="list-items">
         <vn-list-item
@@ -204,7 +211,7 @@ import {
   showOptionsPage,
   showSupportPage,
   getDataTypeIcon,
-  handleBrowserActionEscapeKey,
+  handleActionEscapeKey,
   getAppTheme
 } from 'utils/app';
 import {getText, getActiveTab} from 'utils/common';
@@ -588,7 +595,7 @@ export default {
   },
 
   mounted: function () {
-    handleBrowserActionEscapeKey();
+    handleActionEscapeKey();
 
     window.setTimeout(() => {
       if (this.searchModeAction === 'url' && !this.$env.isMobile) {
@@ -634,7 +641,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  column-gap: 12px;
+  column-gap: 8px;
   white-space: nowrap;
   padding-left: 4px;
   padding-right: 4px;
@@ -648,13 +655,12 @@ body {
   height: 24px;
 }
 
-.options-button,
-.contribute-button {
-  margin-left: 8px;
-}
+.header-buttons {
+  column-gap: 4px;
 
-.menu-button {
-  margin-left: 4px;
+  & .header-pinned-buttons {
+    column-gap: 8px;
+  }
 }
 
 .contribute-button {
@@ -722,8 +728,11 @@ body {
   max-height: 100px;
   padding-top: 8px;
   padding-bottom: 24px;
-  transition: max-height 0.3s ease, padding-top 0.3s ease,
-    padding-bottom 0.3s ease, opacity 0.2s ease;
+  transition:
+    max-height 0.3s ease,
+    padding-top 0.3s ease,
+    padding-bottom 0.3s ease,
+    opacity 0.2s ease;
 }
 
 .settings-enter-from,
@@ -762,5 +771,19 @@ body {
 
 html.firefox.android {
   height: 100%;
+}
+
+html.samsung {
+  & .v-application__wrap {
+    height: initial;
+  }
+}
+
+// Safari 17: the popover opens after a delay the first time the action
+// button is clicked on macOS 14, unless the height is declared.
+@if $target-env == 'safari' {
+  html {
+    min-height: 56px;
+  }
 }
 </style>

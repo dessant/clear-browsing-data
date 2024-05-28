@@ -1,18 +1,27 @@
 import Queue from 'p-queue';
 
-import {initStorage, migrateLegacyStorage} from 'storage/init';
+import {initStorage} from 'storage/init';
 import {isStorageReady} from 'storage/storage';
 import storage from 'storage/storage';
-import {getText, getActiveTab, getPlatform, isAndroid} from 'utils/common';
+import {
+  getText,
+  getActiveTab,
+  isValidTab,
+  getPlatform,
+  isAndroid,
+  runOnce
+} from 'utils/common';
 import {
   getEnabledDataTypes,
   showNotification,
   showPage,
   processAppUse,
-  processMessageResponse
+  processMessageResponse,
+  setAppVersion,
+  getStartupState
 } from 'utils/app';
 import {optionKeys} from 'utils/data';
-import {targetEnv} from 'utils/config';
+import {targetEnv, mv3} from 'utils/config';
 
 const queue = new Queue({concurrency: 1});
 
@@ -179,12 +188,10 @@ async function clearDataType(dataType, options = null, enDataTypes = null) {
   }
 
   if (options.notifyOnSuccess) {
-    const notification = await showNotification({
-      messageId: 'info_dataTypeCleared'
+    await showNotification({
+      messageId: 'info_dataTypeCleared',
+      timeout: 6000 // 6 seconds
     });
-    window.setTimeout(() => {
-      browser.notifications.clear(notification);
-    }, 6000); // 6 seconds
   }
 
   if (options.reloadTabs !== 'false') {
@@ -245,7 +252,7 @@ async function onActionPopupClick(dataType) {
 async function processMessage(request, sender) {
   // Samsung Internet 13: extension messages are sometimes also dispatched
   // to the sender frame.
-  if (sender.url === document.URL) {
+  if (sender.url === self.location.href) {
     return;
   }
 
@@ -261,7 +268,7 @@ async function processMessage(request, sender) {
       sender.tab = null;
     }
 
-    if (sender.tab && sender.tab.id !== browser.tabs.TAB_ID_NONE) {
+    if (await isValidTab({tab: sender.tab})) {
       // Samsung Internet 13: runtime.onMessage provides wrong tab index.
       sender.tab = await browser.tabs.get(sender.tab.id);
     }
@@ -270,7 +277,7 @@ async function processMessage(request, sender) {
   if (request.id === 'actionPopupSubmit') {
     onActionPopupClick(request.item);
   } else if (request.id === 'getPlatform') {
-    return getPlatform({fallback: false});
+    return getPlatform();
   } else if (request.id === 'optionChange') {
     await onOptionChange();
   } else if (request.id === 'showPage') {
@@ -296,53 +303,96 @@ async function setBrowserAction() {
   ]);
   const enDataTypes = await getEnabledDataTypes(options);
 
+  const action = mv3 ? browser.action : browser.browserAction;
+
   if (enDataTypes.length === 1) {
-    browser.browserAction.setTitle({
+    action.setTitle({
       title: getText(`actionTitle_${enDataTypes[0]}`)
     });
-    browser.browserAction.setPopup({popup: ''});
+    action.setPopup({popup: ''});
   } else if (
     options.clearAllDataTypesAction === 'main' &&
     enDataTypes.length > 1
   ) {
-    browser.browserAction.setTitle({
+    action.setTitle({
       title: getText('actionTitle_allDataTypes')
     });
-    browser.browserAction.setPopup({popup: ''});
+    action.setPopup({popup: ''});
   } else {
-    browser.browserAction.setTitle({title: getText('extensionName')});
+    action.setTitle({title: getText('extensionName')});
     if (enDataTypes.length === 0) {
-      browser.browserAction.setPopup({popup: ''});
+      action.setPopup({popup: ''});
     } else {
-      browser.browserAction.setPopup({popup: '/src/action/index.html'});
+      action.setPopup({popup: '/src/action/index.html'});
     }
   }
 }
 
-function addBrowserActionListener() {
-  browser.browserAction.onClicked.addListener(onActionButtonClick);
+async function onInstall(details) {
+  if (['install', 'update'].includes(details.reason)) {
+    await setup({event: 'install'});
+  }
+}
+
+async function onStartup() {
+  await setup({event: 'startup'});
+}
+
+function addActionListener() {
+  if (mv3) {
+    browser.action.onClicked.addListener(onActionButtonClick);
+  } else {
+    browser.browserAction.onClicked.addListener(onActionButtonClick);
+  }
 }
 
 function addMessageListener() {
   browser.runtime.onMessage.addListener(onMessage);
 }
 
+function addInstallListener() {
+  browser.runtime.onInstalled.addListener(onInstall);
+}
+
+function addStartupListener() {
+  browser.runtime.onStartup.addListener(onStartup);
+}
+
 async function setupUI() {
   await queue.add(setBrowserAction);
 }
 
-async function setup() {
-  if (!(await isStorageReady())) {
-    await migrateLegacyStorage();
-    await initStorage();
+async function setup({event = ''} = {}) {
+  const startup = await getStartupState({event});
+
+  if (startup.setupInstance) {
+    await runOnce('setupInstance', async () => {
+      if (!(await isStorageReady())) {
+        await initStorage();
+      }
+
+      if (startup.update) {
+        await setAppVersion();
+      }
+    });
   }
 
-  await setupUI();
+  if (startup.setupSession) {
+    await runOnce('setupSession', async () => {
+      if (mv3 && !(await isStorageReady({area: 'session'}))) {
+        await initStorage({area: 'session', silent: true});
+      }
+
+      await setupUI();
+    });
+  }
 }
 
 function init() {
-  addBrowserActionListener();
+  addActionListener();
   addMessageListener();
+  addInstallListener();
+  addStartupListener();
 
   setup();
 }

@@ -5,11 +5,18 @@ import {
   getText,
   createTab,
   getActiveTab,
+  isValidTab,
   getPlatform,
   getDayPrecisionEpoch,
   getDarkColorSchemeQuery
 } from 'utils/common';
-import {targetEnv, enableContributions} from 'utils/config';
+import {
+  targetEnv,
+  enableContributions,
+  storageRevisions,
+  appVersion,
+  mv3
+} from 'utils/config';
 import {
   supportUrl,
   dataTypeIconAlias,
@@ -45,7 +52,7 @@ async function showNotification({
     });
   } else {
     const notification = await browser.notifications.create(
-      `wa-notification-${type}`,
+      `cb-notification-${type}`,
       {
         type: 'basic',
         title,
@@ -55,7 +62,7 @@ async function showNotification({
     );
 
     if (timeout) {
-      window.setTimeout(() => {
+      self.setTimeout(() => {
         browser.notifications.clear(notification);
       }, timeout);
     }
@@ -92,17 +99,6 @@ async function loadFonts(fonts) {
   await Promise.allSettled(fonts.map(font => document.fonts.load(font)));
 }
 
-async function configApp(app) {
-  const platform = await getPlatform();
-
-  const classes = [platform.targetEnv, platform.os];
-  document.documentElement.classList.add(...classes);
-
-  if (app) {
-    app.config.globalProperties.$env = platform;
-  }
-}
-
 function processMessageResponse(response, sendResponse) {
   if (targetEnv === 'safari') {
     response.then(function (result) {
@@ -119,12 +115,55 @@ function processMessageResponse(response, sendResponse) {
   }
 }
 
-async function getOpenerTabId(openerTab) {
-  if (
-    openerTab.id !== browser.tabs.TAB_ID_NONE &&
-    !(await getPlatform()).isMobile
-  ) {
-    return openerTab.id;
+async function configApp(app) {
+  const platform = await getPlatform();
+
+  const classes = [platform.targetEnv, platform.os];
+  document.documentElement.classList.add(...classes);
+
+  if (app) {
+    app.config.globalProperties.$env = platform;
+  }
+}
+
+async function getAppTheme(theme) {
+  if (!theme) {
+    ({appTheme: theme} = await storage.get('appTheme'));
+  }
+
+  if (theme === 'auto') {
+    theme = getDarkColorSchemeQuery().matches ? 'dark' : 'light';
+  }
+
+  return theme;
+}
+
+function addSystemThemeListener(callback) {
+  getDarkColorSchemeQuery().addEventListener('change', function () {
+    callback();
+  });
+}
+
+function addAppThemeListener(callback) {
+  browser.storage.onChanged.addListener(function (changes, area) {
+    if (area === 'local' && changes.appTheme) {
+      callback();
+    }
+  });
+}
+
+function addThemeListener(callback) {
+  addSystemThemeListener(callback);
+  addAppThemeListener(callback);
+}
+
+async function getOpenerTabId({tab, tabId = null} = {}) {
+  if (!tab && tabId !== null) {
+    tab = await browser.tabs.get(tabId).catch(err => null);
+  }
+
+  if ((await isValidTab({tab})) && !(await getPlatform()).isMobile) {
+    return tab.id;
   }
 
   return null;
@@ -143,7 +182,7 @@ async function showPage({
   const props = {url, index: activeTab.index + 1, active: true, getTab};
 
   if (setOpenerTab) {
-    props.openerTabId = await getOpenerTabId(activeTab);
+    props.openerTabId = await getOpenerTabId({tab: activeTab});
   }
 
   return createTab(props);
@@ -277,7 +316,7 @@ function getDataTypeIcon(dataType, {variant = ''} = {}) {
   return `/src/assets/icons/datatypes/${name}.${ext}`;
 }
 
-function handleBrowserActionEscapeKey() {
+function handleActionEscapeKey() {
   // Keep the browser action open when a menu or popup is active
 
   // Firefox: extensions cannot handle the Escape key event
@@ -292,34 +331,121 @@ function handleBrowserActionEscapeKey() {
   );
 }
 
-async function getAppTheme(theme) {
-  if (!theme) {
-    ({appTheme: theme} = await storage.get('appTheme'));
+async function setAppVersion() {
+  await storage.set({appVersion});
+}
+
+async function isSessionStartup() {
+  const privateContext = browser.extension.inIncognitoContext;
+
+  const sessionKey = privateContext ? 'privateSession' : 'session';
+  const session = (await browser.storage.session.get(sessionKey))[sessionKey];
+
+  if (!session) {
+    await browser.storage.session.set({[sessionKey]: true});
   }
 
-  if (theme === 'auto') {
-    theme = getDarkColorSchemeQuery().matches ? 'dark' : 'light';
+  if (privateContext) {
+    try {
+      if (!(await self.caches.has(sessionKey))) {
+        await self.caches.open(sessionKey);
+
+        return true;
+      }
+    } catch (err) {
+      return true;
+    }
   }
 
-  return theme;
+  if (!session) {
+    return true;
+  }
+}
+
+async function isStartup() {
+  const startup = {
+    install: false,
+    update: false,
+    session: false,
+    setupInstance: false,
+    setupSession: false
+  };
+
+  const {storageVersion, appVersion: savedAppVersion} =
+    await browser.storage.local.get(['storageVersion', 'appVersion']);
+
+  if (!storageVersion) {
+    startup.install = true;
+  }
+
+  if (
+    storageVersion !== storageRevisions.local ||
+    savedAppVersion !== appVersion
+  ) {
+    startup.update = true;
+  }
+
+  if (mv3 && (await isSessionStartup())) {
+    startup.session = true;
+  }
+
+  if (startup.install || startup.update) {
+    startup.setupInstance = true;
+  }
+
+  if (startup.session || !mv3) {
+    startup.setupSession = true;
+  }
+
+  return startup;
+}
+
+let startupState;
+async function getStartupState({event = ''} = {}) {
+  if (!startupState) {
+    startupState = isStartup();
+    startupState.events = [];
+  }
+
+  if (event) {
+    startupState.events.push(event);
+  }
+
+  const startup = await startupState;
+
+  if (startupState.events.includes('install')) {
+    startup.setupInstance = true;
+  }
+  if (startupState.events.includes('startup')) {
+    startup.setupSession = true;
+  }
+
+  return startup;
 }
 
 export {
   getEnabledDataTypes,
   showNotification,
   getListItems,
-  configApp,
   loadFonts,
   processMessageResponse,
-  showContributePage,
+  configApp,
+  getAppTheme,
+  addSystemThemeListener,
+  addAppThemeListener,
+  addThemeListener,
+  showPage,
+  getOpenerTabId,
   autoShowContributePage,
   updateUseCount,
   processAppUse,
+  showContributePage,
   showOptionsPage,
   showSupportPage,
   getDataTypeIcon,
-  getOpenerTabId,
-  showPage,
-  handleBrowserActionEscapeKey,
-  getAppTheme
+  handleActionEscapeKey,
+  setAppVersion,
+  isSessionStartup,
+  isStartup,
+  getStartupState
 };
