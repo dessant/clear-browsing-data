@@ -23,7 +23,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const enableContributions =
   (process.env.ENABLE_CONTRIBUTIONS || 'true') === 'true';
 
-const mv3 = ['chrome', 'edge', 'opera'].includes(targetEnv);
+const mv3 = ['chrome', 'edge', 'firefox', 'opera'].includes(targetEnv);
 
 const distDir = path.join(__dirname, 'dist', targetEnv);
 
@@ -50,7 +50,7 @@ function js(done) {
 function html() {
   const htmlSrc = ['src/**/*.html'];
 
-  if (mv3) {
+  if (mv3 && !['firefox', 'safari'].includes(targetEnv)) {
     htmlSrc.push('!src/background/*.html');
   }
 
