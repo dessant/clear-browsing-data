@@ -613,7 +613,7 @@ export default {
 
 <style lang="scss">
 @use 'vueton/styles' as vueton;
-@import 'vue-resize/dist/vue-resize';
+@use 'vue-resize/dist/vue-resize';
 
 @include vueton.theme-base;
 @include vueton.transitions;
@@ -670,6 +670,7 @@ body {
 }
 
 .clear-since-menu__content {
+  position: fixed !important;
   top: 56px !important;
   left: 16px !important;
   transform-origin: center top !important;
@@ -683,6 +684,7 @@ body {
 }
 
 .action-menu__content {
+  position: fixed !important;
   top: 56px !important;
   left: auto !important;
   right: 16px !important;
