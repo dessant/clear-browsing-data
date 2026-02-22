@@ -7,7 +7,8 @@
       "kuZ4zBZDX",
       "aPSasaNb4",
       "20230301044301_add_theme_support",
-      "20240514170322_add_appversion"
+      "20240514170322_add_appversion",
+      "20260222110606_configure_data_types"
     ],
     "session": ["20240514122825_initial_version"]
   }

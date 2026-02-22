@@ -48,13 +48,12 @@ Supported data types:
 - Autofill form data
 - Download history
 - Service Workers
-- IndexedDB data
 - Local storage data
-- Website file systems
-- Plugin data
+- IndexedDB data
 - Web SQL data
-- Saved passwords
+- Website file systems
 - Application Cache
+- Plugin data
 
 ## Screenshots
 

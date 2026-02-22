@@ -29,7 +29,6 @@ const dataTypeIconVariants = {
   serviceWorkers: ['dark'],
   webSQL: ['dark'],
   pluginData: ['dark'],
-  passwords: ['dark'],
   localStorage: ['dark'],
   indexedDB: ['dark']
 };

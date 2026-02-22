@@ -59,11 +59,6 @@
     "description": "Title of the action."
   },
 
-  "actionTitle_passwords": {
-    "message": "Clear saved passwords",
-    "description": "Title of the action."
-  },
-
   "actionTitle_pluginData": {
     "message": "Clear plugin data",
     "description": "Title of the action."
@@ -131,11 +126,6 @@
 
   "menuItemTitle_localStorage": {
     "message": "Local storage",
-    "description": "Title of the menu item."
-  },
-
-  "menuItemTitle_passwords": {
-    "message": "Passwords",
     "description": "Title of the menu item."
   },
 
@@ -216,11 +206,6 @@
 
   "optionTitle_localStorage": {
     "message": "Local storage data",
-    "description": "Title of the option."
-  },
-
-  "optionTitle_passwords": {
-    "message": "Saved passwords",
     "description": "Title of the option."
   },
 
