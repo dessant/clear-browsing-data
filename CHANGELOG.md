@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.1.0](https://github.com/dessant/clear-browsing-data/compare/v5.0.0...v5.1.0) (2026-02-22)
+
+
+### Features
+
+* upgrade to Manifest V3 in Edge and Opera ([b7c7774](https://github.com/dessant/clear-browsing-data/commit/b7c77747f9e17b473d67f7f4a49ab50fe1f6bef4))
+* upgrade to Manifest V3 in Firefox ([70fea66](https://github.com/dessant/clear-browsing-data/commit/70fea6658269dacee9a748d57a012036b9c8a963))
+
+
+### Bug Fixes
+
+* do not allow removing saved passwords ([9a150a1](https://github.com/dessant/clear-browsing-data/commit/9a150a15ecde8afcedaa2d8d44b5307120a91eeb))
+
 ## [5.0.0](https://github.com/dessant/clear-browsing-data/compare/v4.0.0...v5.0.0) (2024-05-28)
 
 
