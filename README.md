@@ -27,9 +27,9 @@
 The continued development of Clear Browsing Data is made possible
 thanks to the support of awesome backers. If you'd like to join them,
 please consider contributing with
-[Patreon](https://armin.dev/go/patreon?pr=clear-browsing-data&src=repo),
-[PayPal](https://armin.dev/go/paypal?pr=clear-browsing-data&src=repo) or
-[Bitcoin](https://armin.dev/go/bitcoin?pr=clear-browsing-data&src=repo).
+[Patreon](https://go.vapps.dev/patreon?pr=clear-browsing-data&src=repo),
+[PayPal](https://go.vapps.dev/paypal?pr=clear-browsing-data&src=repo) or
+[Bitcoin](https://go.vapps.dev/bitcoin?pr=clear-browsing-data&src=repo).
 
 ## Description
 
