@@ -235,6 +235,7 @@ export {
   getDarkColorSchemeQuery,
   getDayPrecisionEpoch,
   isBackgroundPageContext,
+  getStore,
   runOnce,
   sleep
 };

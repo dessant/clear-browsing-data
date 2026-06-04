@@ -33,14 +33,23 @@ const dataTypeIconVariants = {
   indexedDB: ['dark']
 };
 
+const sponsorLogoVariants = {};
+
 const rasterDataTypeIcons = [];
 
 const supportUrl = 'https://github.com/dessant/clear-browsing-data/issues';
+
+const sponsors = [];
+
+const sponsorSites = {};
 
 export {
   optionKeys,
   dataTypeIconAlias,
   dataTypeIconVariants,
+  sponsorLogoVariants,
   rasterDataTypeIcons,
-  supportUrl
+  supportUrl,
+  sponsors,
+  sponsorSites
 };

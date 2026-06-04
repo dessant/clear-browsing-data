@@ -18,10 +18,12 @@ import {
   mv3
 } from 'utils/config';
 import {
-  supportUrl,
   dataTypeIconAlias,
   dataTypeIconVariants,
-  rasterDataTypeIcons
+  sponsorLogoVariants,
+  rasterDataTypeIcons,
+  supportUrl,
+  sponsorSites
 } from 'utils/data';
 
 async function getEnabledDataTypes(options) {
@@ -303,6 +305,14 @@ async function showSupportPage({getTab = false, activeTab = null} = {}) {
   return showPage({url: supportUrl, getTab, activeTab});
 }
 
+async function showSponsorPage({
+  name = '',
+  getTab = false,
+  activeTab = null
+} = {}) {
+  return showPage({url: getSponsorUrl(name), getTab, activeTab});
+}
+
 function getDataTypeIcon(dataType, {variant = ''} = {}) {
   dataType = dataTypeIconAlias[dataType] || dataType;
 
@@ -423,6 +433,18 @@ async function getStartupState({event = ''} = {}) {
   return startup;
 }
 
+function getSponsorUrl(name) {
+  return sponsorSites[name];
+}
+
+function getSponsorLogo(name, {variant = ''} = {}) {
+  if (variant && sponsorLogoVariants[name]?.includes(variant)) {
+    name += `-${variant}`;
+  }
+
+  return `/src/assets/icons/sponsors/${name}.svg`;
+}
+
 export {
   getEnabledDataTypes,
   showNotification,
@@ -442,10 +464,13 @@ export {
   showContributePage,
   showOptionsPage,
   showSupportPage,
+  showSponsorPage,
   getDataTypeIcon,
   handleActionEscapeKey,
   setAppVersion,
   isSessionStartup,
   isStartup,
-  getStartupState
+  getStartupState,
+  getSponsorUrl,
+  getSponsorLogo
 };
