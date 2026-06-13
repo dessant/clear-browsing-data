@@ -33,15 +33,19 @@ const dataTypeIconVariants = {
   indexedDB: ['dark']
 };
 
-const sponsorLogoVariants = {};
+const sponsorLogoVariants = {
+  lenso: ['dark']
+};
 
 const rasterDataTypeIcons = [];
 
 const supportUrl = 'https://github.com/dessant/clear-browsing-data/issues';
 
-const sponsors = [];
+const sponsors = ['lenso'];
 
-const sponsorSites = {};
+const sponsorSites = {
+  lenso: 'https://go.vapps.dev/c2/sponsor/lenso'
+};
 
 export {
   optionKeys,
