@@ -26,6 +26,7 @@ const targetEnv = process.env.TARGET_ENV || 'chrome';
 const isProduction = process.env.NODE_ENV === 'production';
 const enableContributions =
   (process.env.ENABLE_CONTRIBUTIONS || 'true') === 'true';
+const enableSponsors = (process.env.ENABLE_SPONSORS || 'true') === 'true';
 
 const mv3 = ['chrome', 'edge', 'firefox', 'opera'].includes(targetEnv);
 
@@ -96,7 +97,12 @@ async function images(done) {
   }
 
   await new Promise(resolve => {
-    src('src/assets/icons/@(app|datatypes|misc|sponsors)/*.@(png|svg)', {
+    let sources = 'app|datatypes|misc';
+    if (enableSponsors) {
+      sources += '|sponsors';
+    }
+
+    src(`src/assets/icons/@(${sources})/*.@(png|svg)`, {
       base: '.',
       encoding: false
     })
