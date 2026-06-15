@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [5.1.2](https://github.com/dessant/clear-browsing-data/compare/v5.1.1...v5.1.2) (2026-06-15)
+
+
+### Bug Fixes
+
+* update dependencies ([b2150a0](https://github.com/dessant/clear-browsing-data/commit/b2150a028089019decb42bd721221f0bbc08e632))
+
 ## [5.1.1](https://github.com/dessant/clear-browsing-data/compare/v5.1.0...v5.1.1) (2026-06-04)
 
 
